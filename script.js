@@ -792,32 +792,272 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    if (ageButton) {
-        ageButton.addEventListener('click', function() {
-            if (!hasAged) {
-                // Flash the button to dark green temporarily
-                this.style.backgroundColor = '#177722';
-                setTimeout(() => {
-                    this.style.backgroundColor = '#22bb33';
-                }, 100);
-                
-                // Determine gender (50/50 chance)
-                const isMale = Math.random() < 0.5;
-                const gender = isMale ? "male" : "female";
-                const genderSymbol = isMale ? "♂" : "♀";
-                const genderIconColor = isMale ? "#3498db" : "#e84393";
-                
-                // Select random country
-                const country = countries[Math.floor(Math.random() * countries.length)];
-                
-                // Determine ethnicity based on country demographics
-                let ethnicity = determineEthnicity(country.demographics);
-                
-                // Select random first name based on ethnicity and gender
-                const firstName = names[ethnicity][gender][Math.floor(Math.random() * names[ethnicity][gender].length)];
-                
-                // Select random last name based on ethnicity
-                const lastName = lastNames[ethnicity][Math.floor(Math.random() * lastNames[ethnicity].length)];
+    // Character Creation (Start Menu) System
+    let characterPreview = {
+        firstName: '',
+        lastName: '',
+        gender: 'male',
+        country: null,
+        ethnicity: '',
+        emoji: ''
+    };
+
+    // Get Start Menu elements
+    const startMenuOverlay = document.getElementById('startMenuOverlay');
+    const startMenu = document.getElementById('startMenu');
+    const previewAvatar = document.getElementById('previewAvatar');
+    const previewName = document.getElementById('previewName');
+    const previewGender = document.getElementById('previewGender');
+    const previewCountry = document.getElementById('previewCountry');
+    const randomizeBtn = document.getElementById('randomizeBtn');
+    const startGameBtn = document.getElementById('startGameBtn');
+    const nameSlot = document.getElementById('nameSlot');
+    const genderSlot = document.getElementById('genderSlot');
+    const countrySlot = document.getElementById('countrySlot');
+
+    // Country Select Menu elements
+    const countrySelectMenu = document.getElementById('countrySelectMenu');
+    const countrySelectList = document.getElementById('countrySelectList');
+    const countrySelectClose = document.getElementById('countrySelectClose');
+
+    // Name Input Menu elements
+    const nameInputMenu = document.getElementById('nameInputMenu');
+    const nameInputField = document.getElementById('nameInputField');
+    const nameInputGo = document.getElementById('nameInputGo');
+    const nameInputClose = document.getElementById('nameInputClose');
+
+    // Randomize character preview
+    function randomizeCharacter() {
+        // Random gender
+        characterPreview.gender = Math.random() < 0.5 ? 'male' : 'female';
+
+        // Random country
+        characterPreview.country = countries[Math.floor(Math.random() * countries.length)];
+
+        // Determine ethnicity based on country demographics
+        characterPreview.ethnicity = determineEthnicity(characterPreview.country.demographics);
+
+        // Random name
+        characterPreview.firstName = names[characterPreview.ethnicity][characterPreview.gender][
+            Math.floor(Math.random() * names[characterPreview.ethnicity][characterPreview.gender].length)
+        ];
+        characterPreview.lastName = lastNames[characterPreview.ethnicity][
+            Math.floor(Math.random() * lastNames[characterPreview.ethnicity].length)
+        ];
+
+        // Set emoji
+        characterPreview.emoji = babyEmojis[characterPreview.ethnicity];
+
+        // Update preview display
+        updatePreviewDisplay();
+    }
+
+    // Update preview display
+    function updatePreviewDisplay() {
+        if (previewAvatar) previewAvatar.textContent = characterPreview.emoji;
+        if (previewName) previewName.textContent = `${characterPreview.firstName} ${characterPreview.lastName}`;
+
+        if (previewGender) {
+            previewGender.textContent = characterPreview.gender === 'male' ? 'Male' : 'Female';
+            previewGender.className = characterPreview.gender;
+        }
+
+        if (previewCountry) {
+            previewCountry.textContent = `${characterPreview.country.name} ${characterPreview.country.code}`;
+        }
+    }
+
+    // Randomize button
+    if (randomizeBtn) {
+        randomizeBtn.addEventListener('click', function() {
+            randomizeCharacter();
+        });
+    }
+
+    // Gender slot toggle
+    if (genderSlot) {
+        genderSlot.addEventListener('click', function() {
+            if (this.classList.contains('disabled')) return;
+
+            characterPreview.gender = characterPreview.gender === 'male' ? 'female' : 'male';
+
+            // Update name based on new gender
+            characterPreview.firstName = names[characterPreview.ethnicity][characterPreview.gender][
+                Math.floor(Math.random() * names[characterPreview.ethnicity][characterPreview.gender].length)
+            ];
+
+            updatePreviewDisplay();
+        });
+    }
+
+    // Country slot - open country select
+    if (countrySlot) {
+        countrySlot.addEventListener('click', function() {
+            if (this.classList.contains('disabled')) return;
+
+            // Disable Start Menu buttons
+            nameSlot.classList.add('disabled');
+            genderSlot.classList.add('disabled');
+            countrySlot.classList.add('disabled');
+            randomizeBtn.classList.add('disabled');
+            startGameBtn.classList.add('disabled');
+
+            // Populate country list
+            populateCountryList();
+
+            // Show country select menu
+            countrySelectMenu.classList.add('active');
+        });
+    }
+
+    // Populate country list
+    function populateCountryList() {
+        if (!countrySelectList) return;
+
+        countrySelectList.innerHTML = '';
+
+        countries.forEach(country => {
+            const item = document.createElement('div');
+            item.className = 'country-item';
+            item.textContent = `${country.name} ${country.code}`;
+
+            item.addEventListener('click', function() {
+                selectCountry(country);
+            });
+
+            countrySelectList.appendChild(item);
+        });
+    }
+
+    // Select country
+    function selectCountry(country) {
+        characterPreview.country = country;
+
+        // Re-determine ethnicity based on new country
+        characterPreview.ethnicity = determineEthnicity(country.demographics);
+
+        // Update name based on new ethnicity
+        characterPreview.firstName = names[characterPreview.ethnicity][characterPreview.gender][
+            Math.floor(Math.random() * names[characterPreview.ethnicity][characterPreview.gender].length)
+        ];
+        characterPreview.lastName = lastNames[characterPreview.ethnicity][
+            Math.floor(Math.random() * lastNames[characterPreview.ethnicity].length)
+        ];
+
+        // Update emoji
+        characterPreview.emoji = babyEmojis[characterPreview.ethnicity];
+
+        updatePreviewDisplay();
+        closeCountrySelect();
+    }
+
+    // Close country select
+    function closeCountrySelect() {
+        countrySelectMenu.classList.remove('active');
+
+        // Re-enable Start Menu buttons
+        nameSlot.classList.remove('disabled');
+        genderSlot.classList.remove('disabled');
+        countrySlot.classList.remove('disabled');
+        randomizeBtn.classList.remove('disabled');
+        startGameBtn.classList.remove('disabled');
+    }
+
+    // Country select close button
+    if (countrySelectClose) {
+        countrySelectClose.addEventListener('click', closeCountrySelect);
+    }
+
+    // Name slot - open name input
+    if (nameSlot) {
+        nameSlot.addEventListener('click', function() {
+            if (this.classList.contains('disabled')) return;
+
+            // Disable Start Menu buttons
+            nameSlot.classList.add('disabled');
+            genderSlot.classList.add('disabled');
+            countrySlot.classList.add('disabled');
+            randomizeBtn.classList.add('disabled');
+            startGameBtn.classList.add('disabled');
+
+            // Clear and focus input
+            if (nameInputField) {
+                nameInputField.value = '';
+                nameInputMenu.classList.add('active');
+                setTimeout(() => nameInputField.focus(), 100);
+            }
+        });
+    }
+
+    // Name input Go button
+    if (nameInputGo) {
+        nameInputGo.addEventListener('click', function() {
+            const customName = nameInputField.value.trim();
+
+            if (customName) {
+                // Split name into first and last (or use as first name only)
+                const nameParts = customName.split(' ');
+                if (nameParts.length >= 2) {
+                    characterPreview.firstName = nameParts[0];
+                    characterPreview.lastName = nameParts.slice(1).join(' ');
+                } else {
+                    characterPreview.firstName = customName;
+                }
+
+                updatePreviewDisplay();
+            }
+
+            closeNameInput();
+        });
+    }
+
+    // Name input close
+    function closeNameInput() {
+        nameInputMenu.classList.remove('active');
+
+        // Re-enable Start Menu buttons
+        nameSlot.classList.remove('disabled');
+        genderSlot.classList.remove('disabled');
+        countrySlot.classList.remove('disabled');
+        randomizeBtn.classList.remove('disabled');
+        startGameBtn.classList.remove('disabled');
+    }
+
+    if (nameInputClose) {
+        nameInputClose.addEventListener('click', closeNameInput);
+    }
+
+    // Allow Enter key to submit name
+    if (nameInputField) {
+        nameInputField.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                nameInputGo.click();
+            }
+        });
+    }
+
+    // Start Game button
+    if (startGameBtn) {
+        startGameBtn.addEventListener('click', function() {
+            // Hide Start Menu
+            startMenuOverlay.classList.remove('active');
+            startMenu.classList.remove('active');
+
+            // Start the actual game with the preview data
+            startGameWithCharacter();
+        });
+    }
+
+    // Function to start game with selected character
+    function startGameWithCharacter() {
+                // Use character preview data
+                const gender = characterPreview.gender;
+                const genderSymbol = gender === 'male' ? "♂" : "♀";
+                const genderIconColor = gender === 'male' ? "#3498db" : "#e84393";
+                const country = characterPreview.country;
+                const ethnicity = characterPreview.ethnicity;
+                const firstName = characterPreview.firstName;
+                const lastName = characterPreview.lastName;
                 
                 // Update avatar with baby emoji
                 const avatar = document.getElementById('avatar');
@@ -921,6 +1161,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 animateSpeedometer('looks', looksValue);
 
                 hasAged = true;
+    }
+
+    // Age Button - Show Start Menu
+    if (ageButton) {
+        ageButton.addEventListener('click', function() {
+            if (!hasAged) {
+                // Flash the button to dark green temporarily
+                this.style.backgroundColor = '#177722';
+                setTimeout(() => {
+                    this.style.backgroundColor = '#22bb33';
+                }, 100);
+
+                // Randomize initial character and show Start Menu
+                randomizeCharacter();
+                startMenuOverlay.classList.add('active');
+                startMenu.classList.add('active');
             }
         });
     }

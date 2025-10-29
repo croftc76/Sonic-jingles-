@@ -296,6 +296,61 @@
             </div>
         </div>
     </div>
+
+    <!-- Start Menu (Character Creation) -->
+    <div class="start-menu-overlay" id="startMenuOverlay"></div>
+    <div class="start-menu" id="startMenu">
+        <h2 class="start-menu-title">New Life</h2>
+
+        <div class="character-preview">
+            <div class="preview-avatar" id="previewAvatar">👶</div>
+
+            <div class="preview-slots">
+                <div class="preview-slot" id="nameSlot">
+                    <div class="slot-label">Name</div>
+                    <div class="slot-value" id="previewName">Random Name</div>
+                </div>
+
+                <div class="preview-slot" id="genderSlot">
+                    <div class="slot-label">Gender</div>
+                    <div class="slot-value" id="previewGender">Male</div>
+                </div>
+
+                <div class="preview-slot" id="countrySlot">
+                    <div class="slot-label">Country</div>
+                    <div class="slot-value" id="previewCountry">USA 🇺🇸</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="start-menu-buttons">
+            <button class="start-btn randomize-btn" id="randomizeBtn">🎲 Randomize</button>
+            <button class="start-btn start-game-btn" id="startGameBtn">▶ Start Game</button>
+        </div>
+    </div>
+
+    <!-- Country Select Menu -->
+    <div class="country-select-menu" id="countrySelectMenu">
+        <div class="country-select-header">
+            <div class="country-select-title">Select Country</div>
+            <div class="country-select-close" id="countrySelectClose">✕</div>
+        </div>
+        <div class="country-select-list" id="countrySelectList">
+            <!-- Countries will be populated dynamically -->
+        </div>
+    </div>
+
+    <!-- Name Input Menu -->
+    <div class="name-input-menu" id="nameInputMenu">
+        <div class="name-input-header">
+            <div class="name-input-title">Enter Name</div>
+            <div class="name-input-close" id="nameInputClose">✕</div>
+        </div>
+        <div class="name-input-content">
+            <input type="text" class="name-input-field" id="nameInputField" placeholder="Enter your name..." maxlength="30">
+            <button class="name-input-go" id="nameInputGo">Go?</button>
+        </div>
+    </div>
 </div>
 
 <script src="script.js"></script>
