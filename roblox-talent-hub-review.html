@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Talent Hub Review</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            height: 90vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scene {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.6s ease;
+        }
+
+        .scene.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scene.exit-left {
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+
+        /* Intro Scene */
+        .intro-scene {
+            background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            animation: bounceIn 1s ease;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: white;
+            margin-top: 20px;
+            animation: fadeIn 1s ease 0.5s both;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Bad Qualities Scene */
+        .bad-qualities-intro {
+            background: #1a1a1a;
+        }
+
+        .bad-text {
+            font-size: 6rem;
+            font-weight: bold;
+            color: #ff3333;
+            text-transform: uppercase;
+            animation: explosiveEntry 0.5s ease;
+            text-shadow:
+                0 0 10px #ff3333,
+                0 0 20px #ff3333,
+                0 0 30px #ff3333;
+        }
+
+        @keyframes explosiveEntry {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+                filter: blur(20px);
+            }
+            70% {
+                transform: scale(1.3) rotate(10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        /* Content Scenes */
+        .content-scene {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            justify-content: flex-start;
+            padding-top: 60px;
+        }
+
+        .point-number {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 1.2rem;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .point-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            animation: slideDown 0.6s ease;
+        }
+
+        .point-content {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.8;
+            max-width: 900px;
+            text-align: center;
+            animation: fadeIn 0.8s ease 0.3s both;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Icon animations for each point */
+        .icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Good Qualities Scene */
+        .good-qualities-scene {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+        }
+
+        .good-text {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #2d7a3e;
+            animation: bounceIn 1s ease;
+            margin-bottom: 30px;
+        }
+
+        /* Outro Scene */
+        .outro-scene {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+
+        .reviewer-text {
+            font-size: 2.5rem;
+            color: white;
+            margin-top: 20px;
+            animation: fadeIn 1s ease;
+        }
+
+        .reviewer-name {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin-top: 10px;
+            animation: glowPulse 2s infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700;
+            }
+            50% {
+                text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700, 0 0 60px #ffd700;
+            }
+        }
+
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3rem;
+            color: rgba(0,0,0,0.5);
+            background: rgba(255,255,255,0.8);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            user-select: none;
+        }
+
+        .nav-arrow:hover {
+            background: rgba(255,255,255,1);
+            color: rgba(0,0,0,0.8);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow.left {
+            left: 20px;
+        }
+
+        .nav-arrow.right {
+            right: 20px;
+        }
+
+        .nav-arrow.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Progress indicator */
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background: #4ECDC4;
+            transition: width 0.3s ease;
+            z-index: 1001;
+        }
+
+        .scene-counter {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1rem;
+            color: rgba(0,0,0,0.5);
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        /* Special animations for specific bad qualities */
+        .shake {
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .warning-icon {
+            color: #ff9800;
+        }
+
+        .error-icon {
+            color: #f44336;
+        }
+
+        .bug-icon {
+            color: #9c27b0;
+        }
+
+        .money-icon {
+            color: #4caf50;
+        }
+
+        .chat-icon {
+            color: #2196f3;
+        }
+
+        /* Sound button */
+        .sound-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.8);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .sound-btn:hover {
+            background: rgba(255,255,255,1);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Progress Bar -->
+        <div class="progress-bar" id="progressBar"></div>
+
+        <!-- Scene Counter -->
+        <div class="scene-counter" id="sceneCounter">1 / 1</div>
+
+        <!-- Sound Button -->
+        <button class="sound-btn" id="soundBtn">🔊</button>
+
+        <!-- Navigation Arrows -->
+        <div class="nav-arrow left hidden" id="leftArrow">◀</div>
+        <div class="nav-arrow right" id="rightArrow">▶</div>
+
+        <!-- Scene 1: Intro -->
+        <div class="scene active" data-scene="0">
+            <div class="intro-scene" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div class="logo">🎮 ROBLOX TALENT HUB</div>
+                <div class="subtitle">A Professional Platform Review</div>
+            </div>
+        </div>
+
+        <!-- Scene 2: Bad Qualities Intro -->
+        <div class="scene" data-scene="1">
+            <div class="bad-qualities-intro" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+                <div class="bad-text shake">BAD QUALITIES</div>
+            </div>
+        </div>
+
+        <!-- Scene 3: Forced Migration -->
+        <div class="scene content-scene" data-scene="2">
+            <div class="point-number">Bad Quality #1</div>
+            <div class="icon warning-icon">⚠️</div>
+            <div class="point-title">Forced Migration Disaster</div>
+            <div class="point-content">
+                Roblox permanently locked the DevForum collaboration section on October 1, 2021, forcing developers onto Talent Hub before it was ready. Many developers reported zero job offers after the migration, compared to successfully finding work through the old forum system. The rushed transition disrupted established workflows and left many unable to network effectively.
+            </div>
+        </div>
+
+        <!-- Scene 4: No Quality Control -->
+        <div class="scene content-scene" data-scene="3">
+            <div class="point-number">Bad Quality #2</div>
+            <div class="icon money-icon">💰</div>
+            <div class="point-title">No Quality Control on Job Posts</div>
+            <div class="point-content">
+                Job postings have no quality control. Recruiters often offer work for less than minimum wage (e.g., designing an entire high-poly map for R$300, which is just $3). People confuse Robux amounts with real money - 4,000 Robux sounds like a lot but it's only $4. Posts often lie about compensation, promising exact prices then saying "payment based on your work."
+            </div>
+        </div>
+
+        <!-- Scene 5: Verification Issues -->
+        <div class="scene content-scene" data-scene="4">
+            <div class="point-number">Bad Quality #3</div>
+            <div class="icon">✅</div>
+            <div class="point-title">Misleading Verification System</div>
+            <div class="point-content">
+                Roblox claims verified users are "users that Roblox knows and trusts," but verification only checks age and identity, not actual skills or reliability. Anyone can get verified immediately after creating their account with zero experience. Scammers deliberately seek verification to appear trustworthy. The algorithm also favors verified posts even when you turn off "ID Verified Only."
+            </div>
+        </div>
+
+        <!-- Scene 6: No Comments -->
+        <div class="scene content-scene" data-scene="5">
+            <div class="point-number">Bad Quality #4</div>
+            <div class="icon chat-icon">💬</div>
+            <div class="point-title">No Comment System</div>
+            <div class="point-content">
+                There's no way to comment on any post, unlike the DevForum's collaboration section. This makes it impossible to verify if an applicant is trustworthy before contacting them. Without comments, there's no way for the community to warn each other about bad experiences or share advice. The lack of public discussion prevents good behavior from being recognized and bad behavior from being called out.
+            </div>
+        </div>
+
+        <!-- Scene 7: Broken Search -->
+        <div class="scene content-scene" data-scene="6">
+            <div class="point-number">Bad Quality #5</div>
+            <div class="icon">🔍</div>
+            <div class="point-title">Broken Search System</div>
+            <div class="point-content">
+                The search system is completely broken. When you filter by tags for specific skills, half the time the results don't match what you're looking for. The search shows popular posts regardless of whether they fit your criteria. Oddly enough, DevForum doesn't have this problem at all.
+            </div>
+        </div>
+
+        <!-- Scene 8: Too Many Bugs -->
+        <div class="scene content-scene" data-scene="7">
+            <div class="point-number">Bad Quality #6</div>
+            <div class="icon bug-icon">🐛</div>
+            <div class="point-title">Plagued with Bugs</div>
+            <div class="point-content">
+                The platform suffers from constant bugs: 404/504 errors when loading posts, applications, or profiles. Sometimes you get "You are not qualified" errors blocking all access. Users can't open chats without refreshing multiple times. Job creators can't see most applicants, and applicants can't see their own applications.
+            </div>
+        </div>
+
+        <!-- Scene 9: Messaging Nightmare -->
+        <div class="scene content-scene" data-scene="8">
+            <div class="point-number">Bad Quality #7</div>
+            <div class="icon error-icon">📧</div>
+            <div class="point-title">Messaging System Disaster</div>
+            <div class="point-content">
+                Messages vanish when sent and disappear forever after refreshing. Mobile browsers can't view message history. "Messaging unavailable" appears randomly. Conversations show up blank. Worst case: users can't message ANYONE they applied to. The chat filter censors job-related information and even contact details like Discord usernames, making professional communication impossible.
+            </div>
+        </div>
+
+        <!-- Scene 10: Broken Notifications -->
+        <div class="scene content-scene" data-scene="9">
+            <div class="point-number">Bad Quality #8</div>
+            <div class="icon">🔔</div>
+            <div class="point-title">Broken Notification System</div>
+            <div class="point-content">
+                You get emails about job rejections but never about the original job offers, so you discover missed opportunities only after getting declined. Even with proper notification settings, emails don't send. One manager thought their post had no responses for days, only to discover 40+ hidden applications in the broken inbox.
+            </div>
+        </div>
+
+        <!-- Scene 11: Limited Portfolio -->
+        <div class="scene content-scene" data-scene="10">
+            <div class="point-number">Bad Quality #9</div>
+            <div class="icon">🎨</div>
+            <div class="point-title">Severely Limited Portfolios</div>
+            <div class="point-content">
+                The base layout is identical across all creator pages with no customization (developers created "Bloxfolio" just to have proper portfolios). Images are locked to square shapes, destroying wide thumbnails and UI designs. Only 10 experiences allowed with 300-character descriptions (DevForum allowed 5,000). No videos, audio, or documents - terrible for animators, UI designers, and music producers.
+            </div>
+        </div>
+
+        <!-- Scene 12: Image Moderation Hell -->
+        <div class="scene content-scene" data-scene="11">
+            <div class="point-number">Bad Quality #10</div>
+            <div class="icon">🖼️</div>
+            <div class="point-title">Image Moderation Hell</div>
+            <div class="point-content">
+                Image moderation is absolutely the worst. Users get false warnings every 2 weeks. Images get stuck in "Pending Moderation" for months - some posts have been stuck for over 180 days, making it impossible to post anything as every attempt gets stuck indefinitely.
+            </div>
+        </div>
+
+        <!-- Scene 13: Other Issues -->
+        <div class="scene content-scene" data-scene="12">
+            <div class="point-number">Bad Quality #11</div>
+            <div class="icon">⚙️</div>
+            <div class="point-title">More Problems...</div>
+            <div class="point-content">
+                No bulk messaging (message each applicant individually). Mobile UI is cramped and hostile. Can't add group games to your profile unless you own the group. No way to block or mute users in your inbox. Can't contact creators unless they have an active job posting. The platform is fundamentally broken for professional networking.
+            </div>
+        </div>
+
+        <!-- Scene 14: Good Qualities Intro -->
+        <div class="scene" data-scene="13">
+            <div class="good-qualities-scene" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div class="good-text">Good Qualities</div>
+                <div class="point-content" style="color: #2d7a3e; font-size: 1.3rem;">
+                    The underlying idea of a dedicated platform for Roblox developers is valuable. Some people have successfully found work. The compensation filter feature is useful (when it works). When the platform works as intended, it provides a centralized place for Roblox-specific opportunities.
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 15: Outro -->
+        <div class="scene" data-scene="14">
+            <div class="outro-scene" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div class="icon" style="font-size: 6rem;">⭐</div>
+                <div class="reviewer-text">Reviewed by</div>
+                <div class="reviewer-name">grandpasgettingold</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Scene management
+        let currentScene = 0;
+        const scenes = document.querySelectorAll('.scene');
+        const totalScenes = scenes.length;
+        const leftArrow = document.getElementById('leftArrow');
+        const rightArrow = document.getElementById('rightArrow');
+        const progressBar = document.getElementById('progressBar');
+        const sceneCounter = document.getElementById('sceneCounter');
+        const soundBtn = document.getElementById('soundBtn');
+
+        let soundEnabled = true;
+        let audioContext = null;
+        let outroJinglePlayed = false;
+
+        // Initialize Audio Context
+        function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        // Play a simple beep sound for navigation
+        function playNavigationSound() {
+            if (!soundEnabled || !audioContext) return;
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+        }
+
+        // Play outro jingle
+        function playOutroJingle() {
+            if (!soundEnabled || !audioContext || outroJinglePlayed) return;
+            outroJinglePlayed = true;
+
+            const now = audioContext.currentTime;
+
+            // Melody notes: C5, E5, G5, C6, G5, E5, C5
+            const melody = [
+                { freq: 523.25, start: 0, duration: 0.2 },      // C5
+                { freq: 659.25, start: 0.25, duration: 0.2 },   // E5
+                { freq: 783.99, start: 0.5, duration: 0.2 },    // G5
+                { freq: 1046.50, start: 0.75, duration: 0.3 },  // C6
+                { freq: 783.99, start: 1.1, duration: 0.15 },   // G5
+                { freq: 659.25, start: 1.3, duration: 0.15 },   // E5
+                { freq: 523.25, start: 1.5, duration: 0.4 }     // C5
+            ];
+
+            melody.forEach(note => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.frequency.value = note.freq;
+                oscillator.type = 'triangle';
+
+                gainNode.gain.setValueAtTime(0, now + note.start);
+                gainNode.gain.linearRampToValueAtTime(0.2, now + note.start + 0.02);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + note.start + note.duration);
+
+                oscillator.start(now + note.start);
+                oscillator.stop(now + note.start + note.duration);
+            });
+
+            // Bass notes
+            const bass = [
+                { freq: 130.81, start: 0, duration: 0.5 },     // C3
+                { freq: 196.00, start: 0.75, duration: 0.5 },  // G3
+                { freq: 130.81, start: 1.5, duration: 0.5 }    // C3
+            ];
+
+            bass.forEach(note => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.frequency.value = note.freq;
+                oscillator.type = 'sawtooth';
+
+                gainNode.gain.setValueAtTime(0.15, now + note.start);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + note.start + note.duration);
+
+                oscillator.start(now + note.start);
+                oscillator.stop(now + note.start + note.duration);
+            });
+        }
+
+        function updateScene() {
+            scenes.forEach((scene, index) => {
+                if (index === currentScene) {
+                    scene.classList.add('active');
+                    scene.classList.remove('exit-left');
+                } else if (index < currentScene) {
+                    scene.classList.remove('active');
+                    scene.classList.add('exit-left');
+                } else {
+                    scene.classList.remove('active');
+                    scene.classList.remove('exit-left');
+                }
+            });
+
+            // Update navigation arrows
+            leftArrow.classList.toggle('hidden', currentScene === 0);
+            rightArrow.classList.toggle('hidden', currentScene === totalScenes - 1);
+
+            // Update progress bar
+            const progress = ((currentScene + 1) / totalScenes) * 100;
+            progressBar.style.width = progress + '%';
+
+            // Update scene counter
+            sceneCounter.textContent = `${currentScene + 1} / ${totalScenes}`;
+
+            // Play outro jingle when reaching the last scene
+            if (currentScene === totalScenes - 1) {
+                setTimeout(() => playOutroJingle(), 300);
+            }
+        }
+
+        function nextScene() {
+            if (currentScene < totalScenes - 1) {
+                initAudioContext();
+                playNavigationSound();
+                currentScene++;
+                updateScene();
+            }
+        }
+
+        function previousScene() {
+            if (currentScene > 0) {
+                initAudioContext();
+                playNavigationSound();
+                currentScene--;
+                outroJinglePlayed = false; // Reset if going back from outro
+                updateScene();
+            }
+        }
+
+        // Event listeners
+        leftArrow.addEventListener('click', previousScene);
+        rightArrow.addEventListener('click', nextScene);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextScene();
+            } else if (e.key === 'ArrowLeft') {
+                previousScene();
+            }
+        });
+
+        // Sound toggle
+        soundBtn.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            soundBtn.textContent = soundEnabled ? '🔊' : '🔇';
+            if (soundEnabled) {
+                initAudioContext();
+            }
+        });
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                nextScene();
+            }
+            if (touchEndX > touchStartX + 50) {
+                previousScene();
+            }
+        }
+
+        // Initialize
+        updateScene();
+
+        // Auto-play intro animation
+        window.addEventListener('load', () => {
+            initAudioContext();
+        });
+    </script>
+</body>
+</html>
