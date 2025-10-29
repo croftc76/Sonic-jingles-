@@ -204,43 +204,56 @@
         .content-scene {
             justify-content: flex-start;
             padding-top: 80px;
+            /* Default background in case theme class is missing */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         /* Different background themes for different types of issues */
-        .migration-theme {
-            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+        .scene.migration-theme {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%) !important;
         }
 
-        .money-theme {
-            background: linear-gradient(135deg, #1dd1a1 0%, #10ac84 100%);
+        .scene.money-theme {
+            background: linear-gradient(135deg, #1dd1a1 0%, #10ac84 100%) !important;
         }
 
-        .verification-theme {
-            background: linear-gradient(135deg, #48dbfb 0%, #0abde3 100%);
+        .scene.verification-theme {
+            background: linear-gradient(135deg, #48dbfb 0%, #0abde3 100%) !important;
         }
 
-        .chat-theme {
-            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+        .scene.chat-theme {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%) !important;
         }
 
-        .bug-theme {
-            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+        .scene.bug-theme {
+            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%) !important;
         }
 
-        .search-theme {
-            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+        .scene.search-theme {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%) !important;
         }
 
-        .portfolio-theme {
-            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        .scene.portfolio-theme {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%) !important;
         }
 
-        .notification-theme {
-            background: linear-gradient(135deg, #fab1a0 0%, #ff7675 100%);
+        .scene.notification-theme {
+            background: linear-gradient(135deg, #fab1a0 0%, #ff7675 100%) !important;
         }
 
-        .ui-theme {
-            background: linear-gradient(135deg, #dfe6e9 0%, #b2bec3 100%);
+        .scene.ui-theme {
+            background: linear-gradient(135deg, #dfe6e9 0%, #b2bec3 100%) !important;
+        }
+
+        /* Better text contrast for UI theme */
+        .scene.ui-theme .point-title,
+        .scene.ui-theme .point-content,
+        .scene.ui-theme .point-number {
+            color: #2d3436;
+        }
+
+        .scene.ui-theme .point-content {
+            background: rgba(255,255,255,0.4);
         }
 
         .point-number {
