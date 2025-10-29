@@ -1003,4 +1003,231 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     }
+
+    // Relationship Menu System
+    let isTransitioning = false; // Debounce flag
+    let currentParentData = null; // Store current parent being viewed
+
+    // Get relationship menu elements
+    const relationshipButton = document.querySelectorAll('.nav-button')[3]; // Relationships button
+    const relationshipOverlay = document.getElementById('relationshipOverlay');
+    const relationshipMenu = document.getElementById('relationshipMenu');
+    const relationshipClose = document.getElementById('relationshipClose');
+    const parentsContainer = document.getElementById('parentsContainer');
+    const parentMenu = document.getElementById('parentMenu');
+    const parentBack = document.querySelector('.parent-back');
+    const parentProfileBar = document.getElementById('parentProfileBar');
+    const parentInfoPopup = document.getElementById('parentInfoPopup');
+    const closeParentPopup = document.getElementById('closeParentPopup');
+
+    // Open relationship menu
+    if (relationshipButton) {
+        relationshipButton.addEventListener('click', function() {
+            if (!hasAged || isTransitioning) return; // Only work after age button pressed
+
+            isTransitioning = true;
+
+            // Show overlay and menu
+            relationshipOverlay.classList.add('active');
+            relationshipMenu.classList.add('active');
+
+            // Populate parents
+            populateParents();
+
+            // Allow interactions after transition
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 300);
+        });
+    }
+
+    // Close relationship menu
+    if (relationshipClose) {
+        relationshipClose.addEventListener('click', function() {
+            if (isTransitioning) return;
+
+            isTransitioning = true;
+
+            relationshipOverlay.classList.remove('active');
+            relationshipMenu.classList.remove('active');
+
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 300);
+        });
+    }
+
+    // Populate parents in relationship menu
+    function populateParents() {
+        if (!parentsContainer) return;
+
+        parentsContainer.innerHTML = '';
+
+        // Add mother if exists
+        if (characterData.parents.mother) {
+            const motherItem = createParentItem(characterData.parents.mother, 'Mother');
+            parentsContainer.appendChild(motherItem);
+        }
+
+        // Add father if exists
+        if (characterData.parents.father) {
+            const fatherItem = createParentItem(characterData.parents.father, 'Father');
+            parentsContainer.appendChild(fatherItem);
+        }
+    }
+
+    // Create parent item for relationship menu
+    function createParentItem(parent, role) {
+        const item = document.createElement('div');
+        item.className = 'parent-item';
+
+        item.innerHTML = `
+            <div class="parent-item-left">
+                <div class="parent-item-avatar">${parent.emoji}</div>
+                <div class="parent-item-info">
+                    <div class="parent-item-name">
+                        ${parent.fullName}
+                        <span class="parent-role">(${role})</span>
+                    </div>
+                    <div class="parent-item-relationship">
+                        <div class="relationship-bar-label">Bond</div>
+                        <div class="relationship-bar">
+                            <div class="relationship-bar-fill" style="width: ${parent.stats.relationship}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="parent-item-arrow">→</div>
+        `;
+
+        item.addEventListener('click', function() {
+            if (isTransitioning) return;
+            showParentProfile(parent, role);
+        });
+
+        return item;
+    }
+
+    // Show parent profile menu
+    function showParentProfile(parent, role) {
+        if (isTransitioning) return;
+
+        isTransitioning = true;
+        currentParentData = { parent, role };
+
+        // Update parent menu content
+        document.getElementById('parentTitle').textContent = role.toUpperCase();
+        document.getElementById('parentAvatar').textContent = parent.emoji;
+        document.getElementById('parentName').textContent = parent.fullName;
+        document.getElementById('parentAge').textContent = `Age ${parent.age}`;
+
+        // Update spy subtitle based on gender
+        const spySubtitle = document.getElementById('spySubtitle');
+        if (spySubtitle) {
+            spySubtitle.textContent = `Spy on ${parent.gender === 'female' ? 'her' : 'him'}`;
+        }
+
+        // Show parent menu
+        parentMenu.classList.add('active');
+
+        setTimeout(() => {
+            isTransitioning = false;
+        }, 300);
+    }
+
+    // Back from parent profile
+    if (parentBack) {
+        parentBack.addEventListener('click', function() {
+            if (isTransitioning) return;
+
+            isTransitioning = true;
+
+            parentMenu.classList.remove('active');
+
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 300);
+        });
+    }
+
+    // Show parent info popup
+    if (parentProfileBar) {
+        parentProfileBar.addEventListener('click', function() {
+            if (isTransitioning || !currentParentData) return;
+
+            isTransitioning = true;
+
+            const { parent, role } = currentParentData;
+
+            // Update popup content
+            document.getElementById('parentPopupAvatar').textContent = parent.emoji;
+            document.getElementById('parentPopupName').textContent = parent.fullName;
+            document.getElementById('parentPopupRelationship').textContent = role;
+            document.getElementById('parentPopupAge').textContent = parent.age;
+            document.getElementById('parentPopupEducation').textContent = parent.education || 'Unknown';
+            document.getElementById('parentPopupOccupation').textContent = parent.occupation;
+
+            // Update stat bars
+            const relationshipBar = document.getElementById('parentPopupRelationshipBar');
+            const religiousnessBar = document.getElementById('parentPopupReligiousnessBar');
+            const generosityBar = document.getElementById('parentPopupGenerosityBar');
+            const moneyBar = document.getElementById('parentPopupMoneyBar');
+
+            if (relationshipBar) {
+                relationshipBar.style.width = parent.stats.relationship + '%';
+                relationshipBar.style.backgroundColor = getStatBarColor(parent.stats.relationship);
+            }
+
+            if (religiousnessBar) {
+                religiousnessBar.style.width = parent.stats.religiousness + '%';
+                religiousnessBar.style.backgroundColor = getStatBarColor(parent.stats.religiousness);
+            }
+
+            if (generosityBar) {
+                generosityBar.style.width = parent.stats.generosity + '%';
+                generosityBar.style.backgroundColor = getStatBarColor(parent.stats.generosity);
+            }
+
+            if (moneyBar) {
+                moneyBar.style.width = parent.stats.money + '%';
+                moneyBar.style.backgroundColor = getStatBarColor(parent.stats.money);
+            }
+
+            // Show popup
+            relationshipOverlay.classList.add('active');
+            parentInfoPopup.classList.add('active');
+
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 300);
+        });
+    }
+
+    // Close parent info popup
+    if (closeParentPopup) {
+        closeParentPopup.addEventListener('click', function() {
+            if (isTransitioning) return;
+
+            isTransitioning = true;
+
+            relationshipOverlay.classList.remove('active');
+            parentInfoPopup.classList.remove('active');
+
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 300);
+        });
+    }
+
+    // Close popups when clicking overlay (only for parent info popup, not relationship menu)
+    if (relationshipOverlay) {
+        relationshipOverlay.addEventListener('click', function() {
+            if (isTransitioning) return;
+
+            // Only close if parent info popup is active
+            if (parentInfoPopup.classList.contains('active')) {
+                closeParentPopup.click();
+            }
+        });
+    }
 });
