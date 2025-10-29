@@ -1,0 +1,201 @@
+<div class="game-container">
+    <div class="header">
+        <div class="menu-icon"><div></div></div>
+        <div class="logo">LIFE SIM</div>
+        <div class="premium-button">Premium</div>
+    </div>
+    
+    <div class="profile" id="mainProfile">
+        <div class="profile-left">
+            <div class="avatar" id="avatar">
+                <div class="speech-bubble" id="speechBubble">Waaa!</div>
+            </div>
+            <div class="profile-info">
+                <h2 id="characterName">__________</h2>
+                <p id="characterStatus">__________</p>
+            </div>
+        </div>
+        <div class="bank-balance">
+            $0
+            <p>Bank Balance</p>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="journal">
+            <div class="age-info">
+                <h3>Age: 0 years</h3>
+                <div class="placeholder-text"></div>
+                <div class="placeholder-text"></div>
+                <div class="placeholder-text" style="width: 70%;"></div>
+            </div>
+            
+            <!-- Example of additional journal entries that would be scrollable -->
+            <div class="placeholder-text"></div>
+            <div class="placeholder-text" style="width: 85%;"></div>
+            <div class="placeholder-text" style="width: 60%;"></div>
+            <div class="placeholder-text"></div>
+            <div class="placeholder-text" style="width: 75%;"></div>
+            <div class="placeholder-text"></div>
+            <div class="placeholder-text" style="width: 90%;"></div>
+            <div class="placeholder-text" style="width: 80%;"></div>
+            <div class="placeholder-text"></div>
+            <div class="placeholder-text" style="width: 65%;"></div>
+        </div>
+    </div>
+    
+    <div class="stats">
+        <div class="stat-bar">
+            <div class="stat-label">Happiness <span class="emoji" id="happiness-emoji"></span></div>
+            <div class="stat-container" id="happiness-container">
+                <div class="stat-fill" id="happiness-fill"></div>
+                <div class="stat-percent" id="happiness-percent"></div>
+            </div>
+            <div class="speedometer-container" id="happiness-speedometer">
+                <div class="speedometer-gauge">
+                    <div class="speedometer-semicircle"></div>
+                    <div class="speedometer-overlay"></div>
+                    <div class="speedometer-needle" id="happiness-needle"></div>
+                    <div class="speedometer-percent" id="happiness-text"></div>
+                    <div class="speedometer-marks" id="happiness-marks"></div>
+                </div>
+            </div>
+        </div>
+        <div class="stat-bar">
+            <div class="stat-label">Health <span class="emoji" id="health-emoji"></span></div>
+            <div class="stat-container" id="health-container">
+                <div class="stat-fill" id="health-fill"></div>
+                <div class="stat-percent" id="health-percent"></div>
+            </div>
+            <div class="speedometer-container" id="health-speedometer">
+                <div class="speedometer-gauge">
+                    <div class="speedometer-semicircle"></div>
+                    <div class="speedometer-overlay"></div>
+                    <div class="speedometer-needle" id="health-needle"></div>
+                    <div class="speedometer-percent" id="health-text"></div>
+                    <div class="speedometer-marks" id="health-marks"></div>
+                </div>
+            </div>
+        </div>
+        <div class="stat-bar">
+            <div class="stat-label">Smarts <span class="emoji" id="smarts-emoji"></span></div>
+            <div class="stat-container" id="smarts-container">
+                <div class="stat-fill" id="smarts-fill"></div>
+                <div class="stat-percent" id="smarts-percent"></div>
+            </div>
+            <div class="speedometer-container" id="smarts-speedometer">
+                <div class="speedometer-gauge">
+                    <div class="speedometer-semicircle"></div>
+                    <div class="speedometer-overlay"></div>
+                    <div class="speedometer-needle" id="smarts-needle"></div>
+                    <div class="speedometer-percent" id="smarts-text"></div>
+                    <div class="speedometer-marks" id="smarts-marks"></div>
+                </div>
+            </div>
+        </div>
+        <div class="stat-bar">
+            <div class="stat-label">Looks <span class="emoji" id="looks-emoji"></span></div>
+            <div class="stat-container" id="looks-container">
+                <div class="stat-fill" id="looks-fill"></div>
+                <div class="stat-percent" id="looks-percent"></div>
+            </div>
+            <div class="speedometer-container" id="looks-speedometer">
+                <div class="speedometer-gauge">
+                    <div class="speedometer-semicircle"></div>
+                    <div class="speedometer-overlay"></div>
+                    <div class="speedometer-needle" id="looks-needle"></div>
+                    <div class="speedometer-percent" id="looks-text"></div>
+                    <div class="speedometer-marks" id="looks-marks"></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-space"></div>
+    </div>
+
+    <div class="navigation">
+        <div class="nav-button">
+            <div class="nav-icon" id="profile-icon"></div>
+            Profile
+        </div>
+        <div class="nav-button">
+            <div class="nav-icon" id="assets-icon"></div>
+            Assets
+        </div>
+        <div class="nav-button age-button">
+            <div class="nav-icon" id="ageButton">+</div>
+            Age
+        </div>
+        <div class="nav-button">
+            <div class="nav-icon" id="relationships-icon"></div>
+            Relationships
+        </div>
+        <div class="nav-button">
+            <div class="nav-icon" id="activities-icon"></div>
+            Activities
+        </div>
+    </div>
+    
+    <!-- Overlay and Profile Popup -->
+    <div class="overlay" id="overlay"></div>
+    <div class="profile-popup" id="profilePopup">
+        <div class="popup-close" id="closePopup">✕</div>
+        <div class="popup-header">
+            <div class="popup-avatar" id="popupAvatar"></div>
+            <div class="popup-name">
+                <span id="popupName">__________</span>
+                <span class="popup-you">You</span>
+            </div>
+        </div>
+        <div class="popup-content">
+            <div class="popup-section">
+                <div class="section-header">
+                    <span class="section-icon">🔍</span>
+                    <span class="section-title">Profile</span>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Gender:</div>
+                    <div class="info-value" id="popupGender">__________</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Age:</div>
+                    <div class="info-value" id="popupAge">0</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Location:</div>
+                    <div class="info-value" id="popupLocation">__________</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Diseases:</div>
+                    <div class="info-value" id="popupDiseases">None</div>
+                </div>
+            </div>
+            
+            <div class="popup-stats">
+                <div class="popup-stat-row">
+                    <div class="popup-stat-label">Happiness</div>
+                    <div class="popup-stat-bar">
+                        <div class="popup-stat-fill" id="popupHappinessBar"></div>
+                    </div>
+                </div>
+                <div class="popup-stat-row">
+                    <div class="popup-stat-label">Health</div>
+                    <div class="popup-stat-bar">
+                        <div class="popup-stat-fill" id="popupHealthBar"></div>
+                    </div>
+                </div>
+                <div class="popup-stat-row">
+                    <div class="popup-stat-label">Smarts</div>
+                    <div class="popup-stat-bar">
+                        <div class="popup-stat-fill" id="popupSmartsBar"></div>
+                    </div>
+                </div>
+                <div class="popup-stat-row">
+                    <div class="popup-stat-label">Looks</div>
+                    <div class="popup-stat-bar">
+                        <div class="popup-stat-fill" id="popupLooksBar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
