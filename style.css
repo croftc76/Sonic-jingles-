@@ -949,6 +949,7 @@ body {
 .preview-slot.disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    pointer-events: none;
 }
 
 .preview-slot.disabled:hover {
@@ -1005,6 +1006,7 @@ body {
 .start-btn.disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    pointer-events: none;
 }
 
 .randomize-btn {

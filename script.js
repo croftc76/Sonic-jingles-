@@ -870,6 +870,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Randomize button
     if (randomizeBtn) {
         randomizeBtn.addEventListener('click', function() {
+            if (this.classList.contains('disabled')) return;
             randomizeCharacter();
         });
     }
@@ -1039,6 +1040,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Start Game button
     if (startGameBtn) {
         startGameBtn.addEventListener('click', function() {
+            if (this.classList.contains('disabled')) return;
+
             // Hide Start Menu
             startMenuOverlay.classList.remove('active');
             startMenu.classList.remove('active');
