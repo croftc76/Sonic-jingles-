@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Talent Hub Review</title>
+    <title>Roblox Talent Hub Review - Animated</title>
     <style>
         * {
             margin: 0;
@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Arial', 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             overflow: hidden;
             height: 100vh;
@@ -22,12 +22,12 @@
         }
 
         .container {
-            width: 90%;
-            max-width: 1200px;
-            height: 90vh;
+            width: 95%;
+            max-width: 1400px;
+            height: 95vh;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
             position: relative;
             overflow: hidden;
         }
@@ -40,78 +40,68 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 40px;
+            padding: 60px;
             opacity: 0;
             transform: translateX(100%);
-            transition: all 0.6s ease;
+            transition: all 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .scene.active {
             opacity: 1;
             transform: translateX(0);
+            transition: all 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .scene.exit-left {
             opacity: 0;
-            transform: translateX(-100%);
+            transform: translateX(-100%) scale(0.8);
+            transition: all 0.5s ease-in;
+        }
+
+        /* Particle system */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 4s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 0.7; }
+            50% { transform: translateY(-30px) translateX(20px) scale(1.2); opacity: 1; }
         }
 
         /* Intro Scene */
         .intro-scene {
             background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
+            overflow: hidden;
         }
 
         .logo {
-            font-size: 4rem;
+            font-size: 5rem;
             font-weight: bold;
             color: white;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-            animation: bounceIn 1s ease;
+            text-shadow: 0 0 20px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.2);
+            animation: logoEntry 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            z-index: 2;
         }
 
-        .subtitle {
-            font-size: 1.5rem;
-            color: white;
-            margin-top: 20px;
-            animation: fadeIn 1s ease 0.5s both;
-        }
-
-        @keyframes bounceIn {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Bad Qualities Scene */
-        .bad-qualities-intro {
-            background: #1a1a1a;
-        }
-
-        .bad-text {
-            font-size: 6rem;
-            font-weight: bold;
-            color: #ff3333;
-            text-transform: uppercase;
-            animation: explosiveEntry 0.5s ease;
-            text-shadow:
-                0 0 10px #ff3333,
-                0 0 20px #ff3333,
-                0 0 30px #ff3333;
-        }
-
-        @keyframes explosiveEntry {
+        @keyframes logoEntry {
             0% {
-                transform: scale(0) rotate(-180deg);
+                transform: scale(0) rotate(-360deg);
                 opacity: 0;
-                filter: blur(20px);
+                filter: blur(30px);
             }
-            70% {
-                transform: scale(1.3) rotate(10deg);
+            60% {
+                transform: scale(1.2) rotate(10deg);
             }
             100% {
                 transform: scale(1) rotate(0deg);
@@ -120,101 +110,405 @@
             }
         }
 
-        /* Content Scenes */
+        .subtitle {
+            font-size: 2rem;
+            color: white;
+            margin-top: 30px;
+            animation: subtitleEntry 1s ease 0.5s both;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        @keyframes subtitleEntry {
+            0% {
+                opacity: 0;
+                transform: translateY(50px) scale(0.8);
+                filter: blur(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        /* Bad Qualities Intro */
+        .bad-qualities-intro {
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bad-text {
+            font-size: 7rem;
+            font-weight: 900;
+            color: #ff0000;
+            text-transform: uppercase;
+            animation: badExplosion 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            text-shadow:
+                0 0 20px #ff0000,
+                0 0 40px #ff0000,
+                0 0 60px #ff0000,
+                0 0 80px #ff0000,
+                0 0 100px #ff0000;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes badExplosion {
+            0% {
+                transform: scale(0) rotate(-720deg);
+                opacity: 0;
+                filter: blur(50px);
+                text-shadow: none;
+            }
+            50% {
+                transform: scale(1.5) rotate(10deg);
+                filter: blur(20px);
+            }
+            70% {
+                transform: scale(0.9) rotate(-5deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        .shockwave {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border: 3px solid #ff0000;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: shockwaveExpand 1s ease-out;
+        }
+
+        @keyframes shockwaveExpand {
+            0% {
+                width: 50px;
+                height: 50px;
+                opacity: 1;
+            }
+            100% {
+                width: 1000px;
+                height: 1000px;
+                opacity: 0;
+            }
+        }
+
+        /* Content Scenes - Now with more variety */
         .content-scene {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             justify-content: flex-start;
-            padding-top: 60px;
+            padding-top: 80px;
+        }
+
+        /* Different background themes for different types of issues */
+        .migration-theme {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+        }
+
+        .money-theme {
+            background: linear-gradient(135deg, #1dd1a1 0%, #10ac84 100%);
+        }
+
+        .verification-theme {
+            background: linear-gradient(135deg, #48dbfb 0%, #0abde3 100%);
+        }
+
+        .chat-theme {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+        }
+
+        .bug-theme {
+            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+        }
+
+        .search-theme {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+        }
+
+        .portfolio-theme {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        }
+
+        .notification-theme {
+            background: linear-gradient(135deg, #fab1a0 0%, #ff7675 100%);
+        }
+
+        .ui-theme {
+            background: linear-gradient(135deg, #dfe6e9 0%, #b2bec3 100%);
         }
 
         .point-number {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 1.2rem;
-            color: #666;
+            top: 25px;
+            left: 30px;
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.9);
             font-weight: bold;
+            animation: numberPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.2s both;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        @keyframes numberPop {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
         }
 
         .point-title {
-            font-size: 2rem;
-            color: #333;
-            margin-bottom: 30px;
+            font-size: 2.8rem;
+            color: white;
+            margin-bottom: 40px;
             text-align: center;
-            animation: slideDown 0.6s ease;
+            animation: titleSlide 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-weight: bold;
+            text-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            max-width: 90%;
+        }
+
+        @keyframes titleSlide {
+            0% {
+                opacity: 0;
+                transform: translateY(-60px) scale(0.8);
+                filter: blur(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
         }
 
         .point-content {
-            font-size: 1.1rem;
-            color: #555;
-            line-height: 1.8;
-            max-width: 900px;
+            font-size: 1.3rem;
+            color: white;
+            line-height: 2;
+            max-width: 1000px;
             text-align: center;
-            animation: fadeIn 0.8s ease 0.3s both;
+            animation: contentFade 1s ease 0.4s both;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.15);
+            padding: 30px 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
         }
 
-        @keyframes slideDown {
-            from {
+        @keyframes contentFade {
+            0% {
                 opacity: 0;
-                transform: translateY(-30px);
+                transform: translateY(40px);
+                filter: blur(5px);
             }
-            to {
+            100% {
                 opacity: 1;
                 transform: translateY(0);
+                filter: blur(0);
             }
         }
 
-        /* Icon animations for each point */
-        .icon {
-            font-size: 5rem;
-            margin-bottom: 20px;
-            animation: pulse 2s infinite;
+        /* Animated Icons */
+        .animated-icon {
+            font-size: 6rem;
+            margin-bottom: 30px;
+            animation: iconSpin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+            position: relative;
+            z-index: 2;
         }
 
-        @keyframes pulse {
+        @keyframes iconSpin {
+            0% {
+                transform: scale(0) rotate(-360deg);
+                opacity: 0;
+                filter: blur(20px) drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+            }
+            70% {
+                transform: scale(1.2) rotate(10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+                filter: blur(0) drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+            }
+        }
+
+        .icon-pulse {
+            animation: iconSpin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55), iconPulse 2s ease-in-out 1s infinite;
+        }
+
+        @keyframes iconPulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.15); }
+        }
+
+        /* Special animated SVG icons */
+        .svg-icon {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 30px;
+        }
+
+        /* Money falling animation */
+        .money-icon {
+            animation: moneyFall 2s ease-in-out infinite;
+        }
+
+        @keyframes moneyFall {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(20px) rotate(180deg); }
+        }
+
+        /* Warning shake */
+        .warning-shake {
+            animation: warningShake 0.5s ease 1s infinite;
+        }
+
+        @keyframes warningShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-15px) rotate(-5deg); }
+            75% { transform: translateX(15px) rotate(5deg); }
+        }
+
+        /* Bug crawl */
+        .bug-crawl {
+            animation: bugCrawl 3s ease-in-out infinite;
+        }
+
+        @keyframes bugCrawl {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(-30px) rotate(-15deg); }
+            50% { transform: translateX(0) rotate(0deg); }
+            75% { transform: translateX(30px) rotate(15deg); }
+        }
+
+        /* Chat bubble animation */
+        .chat-bubble {
+            animation: chatBubble 2s ease-in-out infinite;
+        }
+
+        @keyframes chatBubble {
+            0%, 100% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.1) translateY(-10px); }
+        }
+
+        /* Broken glass effect */
+        .broken-icon {
+            animation: brokenShatter 1s ease;
+        }
+
+        @keyframes brokenShatter {
+            0% {
+                transform: scale(1) rotate(0deg);
+                filter: blur(0) brightness(1);
+            }
+            50% {
+                transform: scale(1.2) rotate(10deg);
+                filter: blur(2px) brightness(1.5);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                filter: blur(0) brightness(1);
+            }
         }
 
         /* Good Qualities Scene */
         .good-qualities-scene {
-            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
         }
 
         .good-text {
-            font-size: 4rem;
+            font-size: 5rem;
             font-weight: bold;
-            color: #2d7a3e;
-            animation: bounceIn 1s ease;
-            margin-bottom: 30px;
+            color: white;
+            animation: goodEntry 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            margin-bottom: 40px;
+            text-shadow: 0 3px 15px rgba(0,0,0,0.2);
+        }
+
+        @keyframes goodEntry {
+            0% {
+                transform: scale(0) rotate(180deg);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.1) rotate(-5deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
         }
 
         /* Outro Scene */
         .outro-scene {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .star-icon {
+            font-size: 8rem;
+            animation: starTwinkle 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px gold);
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+                filter: drop-shadow(0 0 20px gold);
+            }
+            50% {
+                transform: scale(1.2) rotate(180deg);
+                filter: drop-shadow(0 0 40px gold);
+            }
         }
 
         .reviewer-text {
             font-size: 2.5rem;
-            color: white;
-            margin-top: 20px;
+            color: #ecf0f1;
+            margin-top: 30px;
             animation: fadeIn 1s ease;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .reviewer-name {
-            font-size: 3.5rem;
+            font-size: 4rem;
             font-weight: bold;
-            color: #ffd700;
-            margin-top: 10px;
-            animation: glowPulse 2s infinite;
+            color: #f39c12;
+            margin-top: 15px;
+            animation: nameGlow 2s ease-in-out infinite;
         }
 
-        @keyframes glowPulse {
+        @keyframes nameGlow {
             0%, 100% {
-                text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700;
+                text-shadow:
+                    0 0 10px #f39c12,
+                    0 0 20px #f39c12,
+                    0 0 30px #f39c12;
+                transform: scale(1);
             }
             50% {
-                text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700, 0 0 60px #ffd700;
+                text-shadow:
+                    0 0 20px #f39c12,
+                    0 0 40px #f39c12,
+                    0 0 60px #f39c12,
+                    0 0 80px #f39c12;
+                transform: scale(1.05);
             }
         }
 
@@ -224,110 +518,118 @@
             top: 50%;
             transform: translateY(-50%);
             font-size: 3rem;
-            color: rgba(0,0,0,0.5);
-            background: rgba(255,255,255,0.8);
-            width: 60px;
-            height: 60px;
+            color: rgba(0,0,0,0.6);
+            background: rgba(255,255,255,0.9);
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             z-index: 1000;
             user-select: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
 
         .nav-arrow:hover {
             background: rgba(255,255,255,1);
-            color: rgba(0,0,0,0.8);
-            transform: translateY(-50%) scale(1.1);
+            color: rgba(0,0,0,0.9);
+            transform: translateY(-50%) scale(1.15);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .nav-arrow:active {
+            transform: translateY(-50%) scale(0.95);
         }
 
         .nav-arrow.left {
-            left: 20px;
+            left: 25px;
         }
 
         .nav-arrow.right {
-            right: 20px;
+            right: 25px;
         }
 
         .nav-arrow.hidden {
             opacity: 0;
             pointer-events: none;
+            transform: translateY(-50%) scale(0.5);
         }
 
-        /* Progress indicator */
+        /* Progress Bar */
         .progress-bar {
             position: absolute;
             bottom: 0;
             left: 0;
-            height: 5px;
-            background: #4ECDC4;
-            transition: width 0.3s ease;
+            height: 6px;
+            background: linear-gradient(90deg, #4ECDC4 0%, #FF6B6B 100%);
+            transition: width 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             z-index: 1001;
+            box-shadow: 0 -2px 10px rgba(78, 205, 196, 0.5);
         }
 
         .scene-counter {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            font-size: 1rem;
-            color: rgba(0,0,0,0.5);
+            bottom: 25px;
+            right: 30px;
+            font-size: 1.2rem;
+            color: rgba(0,0,0,0.6);
             font-weight: bold;
             z-index: 1000;
+            background: rgba(255,255,255,0.9);
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
 
-        /* Special animations for specific bad qualities */
-        .shake {
-            animation: shake 0.5s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        .warning-icon {
-            color: #ff9800;
-        }
-
-        .error-icon {
-            color: #f44336;
-        }
-
-        .bug-icon {
-            color: #9c27b0;
-        }
-
-        .money-icon {
-            color: #4caf50;
-        }
-
-        .chat-icon {
-            color: #2196f3;
-        }
-
-        /* Sound button */
+        /* Sound Button */
         .sound-btn {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255,255,255,0.8);
+            top: 25px;
+            right: 30px;
+            background: rgba(255,255,255,0.9);
             border: none;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 1.5rem;
+            width: 60px;
+            height: 60px;
+            font-size: 1.8rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             z-index: 1001;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
 
         .sound-btn:hover {
             background: rgba(255,255,255,1);
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .sound-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Canvas for particles */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo { font-size: 3rem; }
+            .subtitle { font-size: 1.2rem; }
+            .bad-text { font-size: 4rem; }
+            .point-title { font-size: 1.8rem; }
+            .point-content { font-size: 1rem; padding: 20px; }
+            .animated-icon { font-size: 4rem; }
+            .good-text { font-size: 3rem; }
+            .reviewer-name { font-size: 2.5rem; }
         }
     </style>
 </head>
@@ -337,157 +639,355 @@
         <div class="progress-bar" id="progressBar"></div>
 
         <!-- Scene Counter -->
-        <div class="scene-counter" id="sceneCounter">1 / 1</div>
+        <div class="scene-counter" id="sceneCounter">1 / 34</div>
 
         <!-- Sound Button -->
-        <button class="sound-btn" id="soundBtn">🔊</button>
+        <button class="sound-btn" id="soundBtn" title="Toggle Sound">🔊</button>
 
         <!-- Navigation Arrows -->
         <div class="nav-arrow left hidden" id="leftArrow">◀</div>
         <div class="nav-arrow right" id="rightArrow">▶</div>
 
-        <!-- Scene 1: Intro -->
-        <div class="scene active" data-scene="0">
-            <div class="intro-scene" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                <div class="logo">🎮 ROBLOX TALENT HUB</div>
-                <div class="subtitle">A Professional Platform Review</div>
-            </div>
+        <!-- Scene 0: Intro -->
+        <div class="scene active intro-scene" data-scene="0">
+            <canvas id="introCanvas"></canvas>
+            <div class="logo">🎮 ROBLOX TALENT HUB</div>
+            <div class="subtitle">A Comprehensive Platform Review</div>
         </div>
 
-        <!-- Scene 2: Bad Qualities Intro -->
-        <div class="scene" data-scene="1">
-            <div class="bad-qualities-intro" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
-                <div class="bad-text shake">BAD QUALITIES</div>
-            </div>
+        <!-- Scene 1: Bad Qualities Intro -->
+        <div class="scene bad-qualities-intro" data-scene="1">
+            <div class="shockwave"></div>
+            <div class="shockwave" style="animation-delay: 0.2s;"></div>
+            <div class="shockwave" style="animation-delay: 0.4s;"></div>
+            <div class="bad-text">BAD QUALITIES</div>
         </div>
 
-        <!-- Scene 3: Forced Migration -->
-        <div class="scene content-scene" data-scene="2">
+        <!-- Scene 2: Forced Migration -->
+        <div class="scene content-scene migration-theme" data-scene="2">
             <div class="point-number">Bad Quality #1</div>
-            <div class="icon warning-icon">⚠️</div>
+            <div class="animated-icon icon-pulse warning-shake">⚠️</div>
             <div class="point-title">Forced Migration Disaster</div>
             <div class="point-content">
-                Roblox permanently locked the DevForum collaboration section on October 1, 2021, forcing developers onto Talent Hub before it was ready. Many developers reported zero job offers after the migration, compared to successfully finding work through the old forum system. The rushed transition disrupted established workflows and left many unable to network effectively.
+                On October 1, 2021, Roblox permanently locked the DevForum collaboration section and forced developers to migrate to Talent Hub before it was ready. Many developers begged Roblox to delay the migration, but were ignored. The platform had substantial limitations and users reported ZERO job offers after migration, compared to successfully finding work through the forum.
             </div>
         </div>
 
-        <!-- Scene 4: No Quality Control -->
-        <div class="scene content-scene" data-scene="3">
+        <!-- Scene 3: Low Pay -->
+        <div class="scene content-scene money-theme" data-scene="3">
             <div class="point-number">Bad Quality #2</div>
-            <div class="icon money-icon">💰</div>
-            <div class="point-title">No Quality Control on Job Posts</div>
+            <div class="animated-icon icon-pulse money-icon">💸</div>
+            <div class="point-title">Exploitative Pay Rates</div>
             <div class="point-content">
-                Job postings have no quality control. Recruiters often offer work for less than minimum wage (e.g., designing an entire high-poly map for R$300, which is just $3). People confuse Robux amounts with real money - 4,000 Robux sounds like a lot but it's only $4. Posts often lie about compensation, promising exact prices then saying "payment based on your work."
+                Job postings often offer less than minimum wage. Example: "Design an entire high-poly map for R$300" - that's just $3 USD! People confuse Robux with real money: 4,000 Robux might sound generous, but it's only $4. It's borderline illegal exploitation of developers.
             </div>
         </div>
 
-        <!-- Scene 5: Verification Issues -->
-        <div class="scene content-scene" data-scene="4">
+        <!-- Scene 4: False Compensation -->
+        <div class="scene content-scene money-theme" data-scene="4">
             <div class="point-number">Bad Quality #3</div>
-            <div class="icon">✅</div>
-            <div class="point-title">Misleading Verification System</div>
+            <div class="animated-icon icon-pulse">🤥</div>
+            <div class="point-title">Lying About Payment</div>
             <div class="point-content">
-                Roblox claims verified users are "users that Roblox knows and trusts," but verification only checks age and identity, not actual skills or reliability. Anyone can get verified immediately after creating their account with zero experience. Scammers deliberately seek verification to appear trustworthy. The algorithm also favors verified posts even when you turn off "ID Verified Only."
+                Job posts frequently lie about compensation. They'll advertise an exact price to attract applicants, then change the terms to "payment will be based on your work" once you apply. This bait-and-switch tactic wastes developers' time and creates distrust.
             </div>
         </div>
 
-        <!-- Scene 6: No Comments -->
-        <div class="scene content-scene" data-scene="5">
+        <!-- Scene 5: Verification Misleading -->
+        <div class="scene content-scene verification-theme" data-scene="5">
             <div class="point-number">Bad Quality #4</div>
-            <div class="icon chat-icon">💬</div>
+            <div class="animated-icon icon-pulse">✅</div>
+            <div class="point-title">Misleading "Verified" Badge</div>
+            <div class="point-content">
+                Roblox's Help page states that verified users are "users that Roblox knows and trusts" - but verification only checks age and identity, NOT skills or reliability! Anyone can get verified immediately after creating their account with zero experience. This gives users a false sense of security.
+            </div>
+        </div>
+
+        <!-- Scene 6: Verification Scammers -->
+        <div class="scene content-scene verification-theme" data-scene="6">
+            <div class="point-number">Bad Quality #5</div>
+            <div class="animated-icon icon-pulse">🚨</div>
+            <div class="point-title">Scammers Exploit Verification</div>
+            <div class="point-content">
+                The verification system does NOTHING to prevent scamming. Scammers deliberately seek verification because the badge makes them appear more trustworthy to potential victims. The algorithm also keeps shoving verified posts down your throat even when you disable "ID Verified Only" filter.
+            </div>
+        </div>
+
+        <!-- Scene 7: No Comments -->
+        <div class="scene content-scene chat-theme" data-scene="7">
+            <div class="point-number">Bad Quality #6</div>
+            <div class="animated-icon icon-pulse chat-bubble">💬</div>
             <div class="point-title">No Comment System</div>
             <div class="point-content">
-                There's no way to comment on any post, unlike the DevForum's collaboration section. This makes it impossible to verify if an applicant is trustworthy before contacting them. Without comments, there's no way for the community to warn each other about bad experiences or share advice. The lack of public discussion prevents good behavior from being recognized and bad behavior from being called out.
+                Unlike DevForum's collaboration section, there's NO way to comment on posts. You can't ask questions publicly, can't verify if someone is trustworthy, and can't warn others about bad experiences. The lack of community feedback removes natural accountability and makes the platform feel cold and isolated.
             </div>
         </div>
 
-        <!-- Scene 7: Broken Search -->
-        <div class="scene content-scene" data-scene="6">
-            <div class="point-number">Bad Quality #5</div>
-            <div class="icon">🔍</div>
-            <div class="point-title">Broken Search System</div>
-            <div class="point-content">
-                The search system is completely broken. When you filter by tags for specific skills, half the time the results don't match what you're looking for. The search shows popular posts regardless of whether they fit your criteria. Oddly enough, DevForum doesn't have this problem at all.
-            </div>
-        </div>
-
-        <!-- Scene 8: Too Many Bugs -->
-        <div class="scene content-scene" data-scene="7">
-            <div class="point-number">Bad Quality #6</div>
-            <div class="icon bug-icon">🐛</div>
-            <div class="point-title">Plagued with Bugs</div>
-            <div class="point-content">
-                The platform suffers from constant bugs: 404/504 errors when loading posts, applications, or profiles. Sometimes you get "You are not qualified" errors blocking all access. Users can't open chats without refreshing multiple times. Job creators can't see most applicants, and applicants can't see their own applications.
-            </div>
-        </div>
-
-        <!-- Scene 9: Messaging Nightmare -->
-        <div class="scene content-scene" data-scene="8">
+        <!-- Scene 8: Broken Search -->
+        <div class="scene content-scene search-theme" data-scene="8">
             <div class="point-number">Bad Quality #7</div>
-            <div class="icon error-icon">📧</div>
-            <div class="point-title">Messaging System Disaster</div>
+            <div class="animated-icon icon-pulse broken-icon">🔍</div>
+            <div class="point-title">Completely Broken Search</div>
             <div class="point-content">
-                Messages vanish when sent and disappear forever after refreshing. Mobile browsers can't view message history. "Messaging unavailable" appears randomly. Conversations show up blank. Worst case: users can't message ANYONE they applied to. The chat filter censors job-related information and even contact details like Discord usernames, making professional communication impossible.
+                The search system is fundamentally broken. Filter by tags for specific skills? Half the time results don't match. The search prioritizes popular posts regardless of relevance to your criteria. Meanwhile, DevForum's search works perfectly fine. Why can't Talent Hub get this basic feature right?
             </div>
         </div>
 
-        <!-- Scene 10: Broken Notifications -->
-        <div class="scene content-scene" data-scene="9">
+        <!-- Scene 9: 404/504 Errors -->
+        <div class="scene content-scene bug-theme" data-scene="9">
             <div class="point-number">Bad Quality #8</div>
-            <div class="icon">🔔</div>
-            <div class="point-title">Broken Notification System</div>
+            <div class="animated-icon icon-pulse bug-crawl">🐛</div>
+            <div class="point-title">Constant 404/504 Errors</div>
             <div class="point-content">
-                You get emails about job rejections but never about the original job offers, so you discover missed opportunities only after getting declined. Even with proper notification settings, emails don't send. One manager thought their post had no responses for days, only to discover 40+ hidden applications in the broken inbox.
+                Try loading a job post, application, or creator profile? Good luck! You'll frequently get 404 or 504 errors. Sometimes refreshing helps. Sometimes it doesn't. It's 2025 and basic page loading is still broken on a professional networking platform.
             </div>
         </div>
 
-        <!-- Scene 11: Limited Portfolio -->
-        <div class="scene content-scene" data-scene="10">
+        <!-- Scene 10: "Not Qualified" Error -->
+        <div class="scene content-scene bug-theme" data-scene="10">
             <div class="point-number">Bad Quality #9</div>
-            <div class="icon">🎨</div>
-            <div class="point-title">Severely Limited Portfolios</div>
+            <div class="animated-icon icon-pulse warning-shake">⛔</div>
+            <div class="point-title">"You Are Not Qualified" Block</div>
             <div class="point-content">
-                The base layout is identical across all creator pages with no customization (developers created "Bloxfolio" just to have proper portfolios). Images are locked to square shapes, destroying wide thumbnails and UI designs. Only 10 experiences allowed with 300-character descriptions (DevForum allowed 5,000). No videos, audio, or documents - terrible for animators, UI designers, and music producers.
+                Worst case scenario: you try to open Talent Hub and get hit with "You are not qualified" error, blocking ALL access to the site. Not to a specific job - to the ENTIRE platform. This error can appear randomly and lock you out of your professional networking tool.
             </div>
         </div>
 
-        <!-- Scene 12: Image Moderation Hell -->
-        <div class="scene content-scene" data-scene="11">
+        <!-- Scene 11: Can't Open Chats -->
+        <div class="scene content-scene bug-theme" data-scene="11">
             <div class="point-number">Bad Quality #10</div>
-            <div class="icon">🖼️</div>
-            <div class="point-title">Image Moderation Hell</div>
+            <div class="animated-icon icon-pulse">🔒</div>
+            <div class="point-title">Chats Won't Open</div>
             <div class="point-content">
-                Image moderation is absolutely the worst. Users get false warnings every 2 weeks. Images get stuck in "Pending Moderation" for months - some posts have been stuck for over 180 days, making it impossible to post anything as every attempt gets stuck indefinitely.
+                Users report that when they try to open chats in the inbox, they can't access them on the first try. You need to refresh the page multiple times until the chat finally opens. Sometimes it takes 5, 10, or more refreshes. Imagine trying to conduct professional business like this!
             </div>
         </div>
 
-        <!-- Scene 13: Other Issues -->
-        <div class="scene content-scene" data-scene="12">
+        <!-- Scene 12: Messages Vanish -->
+        <div class="scene content-scene bug-theme" data-scene="12">
             <div class="point-number">Bad Quality #11</div>
-            <div class="icon">⚙️</div>
-            <div class="point-title">More Problems...</div>
+            <div class="animated-icon icon-pulse">👻</div>
+            <div class="point-title">Messages Disappear Forever</div>
             <div class="point-content">
-                No bulk messaging (message each applicant individually). Mobile UI is cramped and hostile. Can't add group games to your profile unless you own the group. No way to block or mute users in your inbox. Can't contact creators unless they have an active job posting. The platform is fundamentally broken for professional networking.
+                You type a message and hit send. It appears briefly... then VANISHES. Refresh the page? Gone forever. This makes it impossible for job creators to communicate with applicants. Your carefully written professional messages just disappear into the void.
             </div>
         </div>
 
-        <!-- Scene 14: Good Qualities Intro -->
-        <div class="scene" data-scene="13">
-            <div class="good-qualities-scene" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                <div class="good-text">Good Qualities</div>
-                <div class="point-content" style="color: #2d7a3e; font-size: 1.3rem;">
-                    The underlying idea of a dedicated platform for Roblox developers is valuable. Some people have successfully found work. The compensation filter feature is useful (when it works). When the platform works as intended, it provides a centralized place for Roblox-specific opportunities.
-                </div>
+        <!-- Scene 13: Mobile Can't View Messages -->
+        <div class="scene content-scene bug-theme" data-scene="13">
+            <div class="point-number">Bad Quality #12</div>
+            <div class="animated-icon icon-pulse">📱</div>
+            <div class="point-title">Mobile Browsers Are Useless</div>
+            <div class="point-content">
+                On mobile browsers, you can navigate to applications but you CANNOT view any messages or conversation history associated with them. The messaging feature is completely non-functional on mobile. In 2025, this is inexcusable for a professional platform.
             </div>
         </div>
 
-        <!-- Scene 15: Outro -->
-        <div class="scene" data-scene="14">
-            <div class="outro-scene" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                <div class="icon" style="font-size: 6rem;">⭐</div>
-                <div class="reviewer-text">Reviewed by</div>
-                <div class="reviewer-name">grandpasgettingold</div>
+        <!-- Scene 14: "Messaging Unavailable" -->
+        <div class="scene content-scene bug-theme" data-scene="14">
+            <div class="point-number">Bad Quality #13</div>
+            <div class="animated-icon icon-pulse broken-icon">⚡</div>
+            <div class="point-title">Random "Messaging Unavailable"</div>
+            <div class="point-content">
+                The system randomly shows "Messaging unavailable" even for people who were chatting with you before. New messages come in but the error doesn't go away. You're locked out of conversations with no explanation or way to fix it.
             </div>
+        </div>
+
+        <!-- Scene 15: Blank Conversations -->
+        <div class="scene content-scene bug-theme" data-scene="15">
+            <div class="point-number">Bad Quality #14</div>
+            <div class="animated-icon icon-pulse">📄</div>
+            <div class="point-title">Blank Conversation Screens</div>
+            <div class="point-content">
+                Sometimes conversations show up in your inbox - you can see you have a conversation - but when you click it, the screen is completely blank. You know messages exist. You just can't see them. It's like trying to read invisible ink.
+            </div>
+        </div>
+
+        <!-- Scene 16: Can't Message Anyone -->
+        <div class="scene content-scene bug-theme" data-scene="16">
+            <div class="point-number">Bad Quality #15</div>
+            <div class="animated-icon icon-pulse warning-shake">🚫</div>
+            <div class="point-title">Completely Locked Out of Messaging</div>
+            <div class="point-content">
+                Worst case scenario: some users can't send messages to ANYONE they applied to. Not just one person. Everyone. You apply to jobs but can never communicate with potential employers. The entire platform becomes useless.
+            </div>
+        </div>
+
+        <!-- Scene 17: Chat Filter Professional Info -->
+        <div class="scene content-scene bug-theme" data-scene="17">
+            <div class="point-number">Bad Quality #16</div>
+            <div class="animated-icon icon-pulse">🔇</div>
+            <div class="point-title">Chat Filter Blocks Job Info</div>
+            <div class="point-content">
+                The same chat filter from Roblox games censors PROFESSIONAL information. Basic job-related terms get filtered out, making it impossible to communicate with clients or employers. Words that aren't offensive get censored in a business setting. DevForum doesn't have this issue.
+            </div>
+        </div>
+
+        <!-- Scene 18: Can't Share Discord -->
+        <div class="scene content-scene bug-theme" data-scene="18">
+            <div class="point-number">Bad Quality #17</div>
+            <div class="animated-icon icon-pulse broken-icon">💔</div>
+            <div class="point-title">Can't Exchange Contact Info</div>
+            <div class="point-content">
+                You literally CANNOT exchange Discord usernames, email addresses, or other contact info. This is devastating because Discord is the standard communication platform for Roblox developers. The filter forces you to use third-party platforms, then punishes you for trying to mention them!
+            </div>
+        </div>
+
+        <!-- Scene 19: Rejection Without Offer Emails -->
+        <div class="scene content-scene notification-theme" data-scene="19">
+            <div class="point-number">Bad Quality #18</div>
+            <div class="animated-icon icon-pulse">📧</div>
+            <div class="point-title">Rejection Emails Without Offers</div>
+            <div class="point-content">
+                You get an email: "Sorry, you weren't selected for this job." Wait, what job? You never received an email about the original job offer! You discover missed opportunities only AFTER being rejected. You never had a chance to respond.
+            </div>
+        </div>
+
+        <!-- Scene 20: Notification Emails Don't Send -->
+        <div class="scene content-scene notification-theme" data-scene="20">
+            <div class="point-number">Bad Quality #19</div>
+            <div class="animated-icon icon-pulse">📭</div>
+            <div class="point-title">Notification Emails Don't Send</div>
+            <div class="point-content">
+                Even with properly configured notification settings, emails just DON'T send. Candidates think recruiters haven't responded when they actually have. One manager thought their post had no responses for DAYS, only to discover 40+ applications hidden in the broken inbox.
+            </div>
+        </div>
+
+        <!-- Scene 21: No Portfolio Customization -->
+        <div class="scene content-scene portfolio-theme" data-scene="21">
+            <div class="point-number">Bad Quality #20</div>
+            <div class="animated-icon icon-pulse">🎨</div>
+            <div class="point-title">Zero Portfolio Customization</div>
+            <div class="point-content">
+                The base layout is identical across ALL creator pages. No customization options. Every portfolio looks exactly the same. This is so limiting that developers created external tools like "Bloxfolio" just to have proper portfolio customization!
+            </div>
+        </div>
+
+        <!-- Scene 22: Image Sizing Locked -->
+        <div class="scene content-scene portfolio-theme" data-scene="22">
+            <div class="point-number">Bad Quality #21</div>
+            <div class="animated-icon icon-pulse">🔲</div>
+            <div class="point-title">Images Locked to Squares</div>
+            <div class="point-content">
+                You CANNOT control image sizing - everything is locked into a square shape. This destroys wide thumbnails, UI designs, and any rectangular work. Developers with 16:9 showcase images are forced to crop them into awkward squares that ruin the composition.
+            </div>
+        </div>
+
+        <!-- Scene 23: 300 Character Limit -->
+        <div class="scene content-scene portfolio-theme" data-scene="23">
+            <div class="point-number">Bad Quality #22</div>
+            <div class="animated-icon icon-pulse">✂️</div>
+            <div class="point-title">300 Characters vs 5,000</div>
+            <div class="point-content">
+                Each experience description has a 300-character limit. DevForum allowed 5,000 characters! You can't properly describe your work, explain your role, or detail technical challenges. Professional portfolios require context - 300 characters is barely a tweet.
+            </div>
+        </div>
+
+        <!-- Scene 24: Only 10 Experiences -->
+        <div class="scene content-scene portfolio-theme" data-scene="24">
+            <div class="point-number">Bad Quality #23</div>
+            <div class="animated-icon icon-pulse">🔟</div>
+            <div class="point-title">Only 10 Experiences Allowed</div>
+            <div class="point-content">
+                You can only showcase 10 experiences total on your portfolio. Many experienced developers have dozens or hundreds of projects. Being forced to pick only 10 severely limits your ability to demonstrate the breadth of your skills and experience.
+            </div>
+        </div>
+
+        <!-- Scene 25: No Videos/Audio/Documents -->
+        <div class="scene content-scene portfolio-theme" data-scene="25">
+            <div class="point-number">Bad Quality #24</div>
+            <div class="animated-icon icon-pulse">🎬</div>
+            <div class="point-title">No Videos, Audio, or Documents</div>
+            <div class="point-content">
+                You can't upload videos, audio files, or documents. This is DEVASTATING for animators who need to show movement, UI designers demonstrating interactions, scripters showing game mechanics, and music producers showcasing their work. Static images don't cut it.
+            </div>
+        </div>
+
+        <!-- Scene 26: Image Moderation False Warnings -->
+        <div class="scene content-scene bug-theme" data-scene="26">
+            <div class="point-number">Bad Quality #25</div>
+            <div class="animated-icon icon-pulse warning-shake">⚠️</div>
+            <div class="point-title">Image Moderation False Warnings</div>
+            <div class="point-content">
+                Image moderation is ABSOLUTELY THE WORST. Users get false warnings every 2 weeks on average. Professional portfolio images - UI mockups, game screenshots, 3D models - flagged as inappropriate for no reason. Your account gets strikes for legitimate work.
+            </div>
+        </div>
+
+        <!-- Scene 27: Images Stuck in Moderation -->
+        <div class="scene content-scene bug-theme" data-scene="27">
+            <div class="point-number">Bad Quality #26</div>
+            <div class="animated-icon icon-pulse">⏳</div>
+            <div class="point-title">Images Stuck for 180+ Days</div>
+            <div class="point-content">
+                Images get stuck in "Pending Moderation" for MONTHS. Some posts have been stuck for over 180 days! Every attempt to post images gets stuck indefinitely, making it impossible to create or update your portfolio. Your professional presence is frozen.
+            </div>
+        </div>
+
+        <!-- Scene 28: No Bulk Messaging -->
+        <div class="scene content-scene ui-theme" data-scene="28">
+            <div class="point-number">Bad Quality #27</div>
+            <div class="animated-icon icon-pulse">📨</div>
+            <div class="point-title">No Bulk Messaging</div>
+            <div class="point-content">
+                Unlike every other modern job platform, there's NO way to send messages to multiple applicants at once. You must message each person individually. With 20+ candidates? That's 20+ copy-paste operations. It's tedious, time-consuming, and unprofessional.
+            </div>
+        </div>
+
+        <!-- Scene 29: Poor Mobile UI -->
+        <div class="scene content-scene ui-theme" data-scene="29">
+            <div class="point-number">Bad Quality #28</div>
+            <div class="animated-icon icon-pulse">📱</div>
+            <div class="point-title">Hostile Mobile UI</div>
+            <div class="point-content">
+                The mobile UI is poorly designed and user-hostile. The message interface has a terrible ratio of used to unused space - cramped where it matters, wasteful everywhere else. Navigating through responses is difficult and uncomfortable.
+            </div>
+        </div>
+
+        <!-- Scene 30: Can't Add Group Games -->
+        <div class="scene content-scene ui-theme" data-scene="30">
+            <div class="point-number">Bad Quality #29</div>
+            <div class="animated-icon icon-pulse">🏢</div>
+            <div class="point-title">Can't Add Group Games</div>
+            <div class="point-content">
+                Developers can't add games they've worked on from a group to their profile unless their account owns the group. Error: "Failure to Add Experience. Ensure that the Experience ID is valid." The only workaround? Hope the owner cooperates and adds games to the group's creator page first.
+            </div>
+        </div>
+
+        <!-- Scene 31: No Block/Mute -->
+        <div class="scene content-scene ui-theme" data-scene="31">
+            <div class="point-number">Bad Quality #30</div>
+            <div class="animated-icon icon-pulse">🚫</div>
+            <div class="point-title">No Block or Mute Feature</div>
+            <div class="point-content">
+                There's NO way to block or mute someone in your inbox. The only workarounds? Report them (might not work) or disable ALL notifications. Blocking users on main Roblox doesn't affect Talent Hub. This basic safety feature has been standard on social platforms since 2005!
+            </div>
+        </div>
+
+        <!-- Scene 32: Can't Contact Without Active Post -->
+        <div class="scene content-scene ui-theme" data-scene="32">
+            <div class="point-number">Bad Quality #31</div>
+            <div class="animated-icon icon-pulse">🔗</div>
+            <div class="point-title">Can't Contact Inactive Creators</div>
+            <div class="point-content">
+                You CANNOT contact or reach out to creators unless they currently have an active job posting live on the platform. This is frustrating given the moderation queue delays and the fact that the best talent often isn't actively posting. Professional networking is impossible.
+            </div>
+        </div>
+
+        <!-- Scene 33: Good Qualities -->
+        <div class="scene good-qualities-scene" data-scene="33">
+            <div class="animated-icon icon-pulse">✨</div>
+            <div class="good-text">Good Qualities</div>
+            <div class="point-content">
+                Despite all these issues, the underlying idea of a dedicated platform for Roblox developers is genuinely valuable. Some people HAVE successfully found work through the platform. The compensation filter feature (when it works) is useful. When everything works as intended, it provides a centralized place for Roblox-specific opportunities that might not exist elsewhere.
+            </div>
+        </div>
+
+        <!-- Scene 34: Outro -->
+        <div class="scene outro-scene" data-scene="34">
+            <canvas id="outroCanvas"></canvas>
+            <div class="animated-icon star-icon">⭐</div>
+            <div class="reviewer-text">Reviewed by</div>
+            <div class="reviewer-name">grandpasgettingold</div>
         </div>
     </div>
 
@@ -506,6 +1006,86 @@
         let audioContext = null;
         let outroJinglePlayed = false;
 
+        // Particle system for intro
+        const introCanvas = document.getElementById('introCanvas');
+        const introCtx = introCanvas.getContext('2d');
+        const particles = [];
+
+        function initIntroCanvas() {
+            introCanvas.width = window.innerWidth;
+            introCanvas.height = window.innerHeight;
+
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x: Math.random() * introCanvas.width,
+                    y: Math.random() * introCanvas.height,
+                    radius: Math.random() * 3 + 1,
+                    speedX: Math.random() * 2 - 1,
+                    speedY: Math.random() * 2 - 1,
+                    color: `hsla(${Math.random() * 60 + 180}, 70%, 60%, 0.6)`
+                });
+            }
+        }
+
+        function animateIntroParticles() {
+            if (currentScene !== 0) return;
+
+            introCtx.clearRect(0, 0, introCanvas.width, introCanvas.height);
+
+            particles.forEach(particle => {
+                particle.x += particle.speedX;
+                particle.y += particle.speedY;
+
+                if (particle.x < 0 || particle.x > introCanvas.width) particle.speedX *= -1;
+                if (particle.y < 0 || particle.y > introCanvas.height) particle.speedY *= -1;
+
+                introCtx.beginPath();
+                introCtx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                introCtx.fillStyle = particle.color;
+                introCtx.fill();
+            });
+
+            requestAnimationFrame(animateIntroParticles);
+        }
+
+        // Particle system for outro
+        const outroCanvas = document.getElementById('outroCanvas');
+        const outroCtx = outroCanvas.getContext('2d');
+        const stars = [];
+
+        function initOutroCanvas() {
+            outroCanvas.width = window.innerWidth;
+            outroCanvas.height = window.innerHeight;
+
+            for (let i = 0; i < 100; i++) {
+                stars.push({
+                    x: Math.random() * outroCanvas.width,
+                    y: Math.random() * outroCanvas.height,
+                    radius: Math.random() * 2,
+                    alpha: Math.random(),
+                    fadeSpeed: Math.random() * 0.02 + 0.01
+                });
+            }
+        }
+
+        function animateOutroStars() {
+            if (currentScene !== totalScenes - 1) return;
+
+            outroCtx.clearRect(0, 0, outroCanvas.width, outroCanvas.height);
+
+            stars.forEach(star => {
+                star.alpha += star.fadeSpeed;
+                if (star.alpha >= 1 || star.alpha <= 0) star.fadeSpeed *= -1;
+
+                outroCtx.beginPath();
+                outroCtx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                outroCtx.fillStyle = `rgba(255, 215, 0, ${star.alpha})`;
+                outroCtx.fill();
+            });
+
+            requestAnimationFrame(animateOutroStars);
+        }
+
         // Initialize Audio Context
         function initAudioContext() {
             if (!audioContext) {
@@ -513,7 +1093,7 @@
             }
         }
 
-        // Play a simple beep sound for navigation
+        // Play navigation sound
         function playNavigationSound() {
             if (!soundEnabled || !audioContext) return;
 
@@ -527,28 +1107,29 @@
             oscillator.type = 'sine';
 
             gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
 
             oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.1);
+            oscillator.stop(audioContext.currentTime + 0.15);
         }
 
-        // Play outro jingle
+        // Play outro jingle - More elaborate version
         function playOutroJingle() {
             if (!soundEnabled || !audioContext || outroJinglePlayed) return;
             outroJinglePlayed = true;
 
             const now = audioContext.currentTime;
 
-            // Melody notes: C5, E5, G5, C6, G5, E5, C5
+            // Extended melody
             const melody = [
-                { freq: 523.25, start: 0, duration: 0.2 },      // C5
-                { freq: 659.25, start: 0.25, duration: 0.2 },   // E5
-                { freq: 783.99, start: 0.5, duration: 0.2 },    // G5
-                { freq: 1046.50, start: 0.75, duration: 0.3 },  // C6
-                { freq: 783.99, start: 1.1, duration: 0.15 },   // G5
-                { freq: 659.25, start: 1.3, duration: 0.15 },   // E5
-                { freq: 523.25, start: 1.5, duration: 0.4 }     // C5
+                { freq: 523.25, start: 0, duration: 0.25 },       // C5
+                { freq: 659.25, start: 0.3, duration: 0.25 },     // E5
+                { freq: 783.99, start: 0.6, duration: 0.25 },     // G5
+                { freq: 1046.50, start: 0.9, duration: 0.4 },     // C6
+                { freq: 987.77, start: 1.35, duration: 0.2 },     // B5
+                { freq: 783.99, start: 1.6, duration: 0.2 },      // G5
+                { freq: 659.25, start: 1.85, duration: 0.2 },     // E5
+                { freq: 523.25, start: 2.1, duration: 0.5 }       // C5
             ];
 
             melody.forEach(note => {
@@ -562,18 +1143,19 @@
                 oscillator.type = 'triangle';
 
                 gainNode.gain.setValueAtTime(0, now + note.start);
-                gainNode.gain.linearRampToValueAtTime(0.2, now + note.start + 0.02);
+                gainNode.gain.linearRampToValueAtTime(0.25, now + note.start + 0.02);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, now + note.start + note.duration);
 
                 oscillator.start(now + note.start);
                 oscillator.stop(now + note.start + note.duration);
             });
 
-            // Bass notes
+            // Bass harmony
             const bass = [
-                { freq: 130.81, start: 0, duration: 0.5 },     // C3
-                { freq: 196.00, start: 0.75, duration: 0.5 },  // G3
-                { freq: 130.81, start: 1.5, duration: 0.5 }    // C3
+                { freq: 130.81, start: 0, duration: 0.6 },        // C3
+                { freq: 164.81, start: 0.6, duration: 0.6 },      // E3
+                { freq: 196.00, start: 1.2, duration: 0.6 },      // G3
+                { freq: 130.81, start: 1.8, duration: 0.8 }       // C3
             ];
 
             bass.forEach(note => {
@@ -586,11 +1168,36 @@
                 oscillator.frequency.value = note.freq;
                 oscillator.type = 'sawtooth';
 
-                gainNode.gain.setValueAtTime(0.15, now + note.start);
+                gainNode.gain.setValueAtTime(0.18, now + note.start);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, now + note.start + note.duration);
 
                 oscillator.start(now + note.start);
                 oscillator.stop(now + note.start + note.duration);
+            });
+
+            // Chord stabs
+            const chords = [
+                { freqs: [523.25, 659.25, 783.99], start: 0.9 },     // C major
+                { freqs: [523.25, 659.25, 783.99], start: 2.1 }      // C major
+            ];
+
+            chords.forEach(chord => {
+                chord.freqs.forEach(freq => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+
+                    oscillator.frequency.value = freq;
+                    oscillator.type = 'square';
+
+                    gainNode.gain.setValueAtTime(0.1, now + chord.start);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + chord.start + 0.3);
+
+                    oscillator.start(now + chord.start);
+                    oscillator.stop(now + chord.start + 0.3);
+                });
             });
         }
 
@@ -608,7 +1215,7 @@
                 }
             });
 
-            // Update navigation arrows
+            // Update navigation
             leftArrow.classList.toggle('hidden', currentScene === 0);
             rightArrow.classList.toggle('hidden', currentScene === totalScenes - 1);
 
@@ -616,12 +1223,15 @@
             const progress = ((currentScene + 1) / totalScenes) * 100;
             progressBar.style.width = progress + '%';
 
-            // Update scene counter
+            // Update counter
             sceneCounter.textContent = `${currentScene + 1} / ${totalScenes}`;
 
-            // Play outro jingle when reaching the last scene
-            if (currentScene === totalScenes - 1) {
-                setTimeout(() => playOutroJingle(), 300);
+            // Canvas animations
+            if (currentScene === 0) {
+                animateIntroParticles();
+            } else if (currentScene === totalScenes - 1) {
+                animateOutroStars();
+                setTimeout(() => playOutroJingle(), 500);
             }
         }
 
@@ -639,7 +1249,7 @@
                 initAudioContext();
                 playNavigationSound();
                 currentScene--;
-                outroJinglePlayed = false; // Reset if going back from outro
+                outroJinglePlayed = false;
                 updateScene();
             }
         }
@@ -650,7 +1260,8 @@
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
                 nextScene();
             } else if (e.key === 'ArrowLeft') {
                 previousScene();
@@ -666,7 +1277,7 @@
             }
         });
 
-        // Touch/swipe support for mobile
+        // Touch/swipe support
         let touchStartX = 0;
         let touchEndX = 0;
 
@@ -676,24 +1287,29 @@
 
         document.addEventListener('touchend', (e) => {
             touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextScene();
+                } else {
+                    previousScene();
+                }
+            }
         });
 
-        function handleSwipe() {
-            if (touchEndX < touchStartX - 50) {
-                nextScene();
-            }
-            if (touchEndX > touchStartX + 50) {
-                previousScene();
-            }
-        }
-
         // Initialize
-        updateScene();
-
-        // Auto-play intro animation
         window.addEventListener('load', () => {
             initAudioContext();
+            initIntroCanvas();
+            initOutroCanvas();
+            updateScene();
+        });
+
+        // Handle resize
+        window.addEventListener('resize', () => {
+            initIntroCanvas();
+            initOutroCanvas();
         });
     </script>
 </body>
