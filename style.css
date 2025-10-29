@@ -554,6 +554,7 @@ body {
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
     transition: opacity 0.3s, visibility 0.3s;
     z-index: 998;
 }
@@ -561,6 +562,7 @@ body {
 .relationship-overlay.active {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
 }
 
 .relationship-menu {
@@ -574,13 +576,16 @@ body {
     background-color: white;
     border-radius: 20px 20px 0 0;
     z-index: 999;
-    transition: top 0.3s ease-out;
+    visibility: hidden;
+    transition: top 0.3s ease-out, visibility 0s 0.3s;
     display: flex;
     flex-direction: column;
 }
 
 .relationship-menu.active {
     top: 10%;
+    visibility: visible;
+    transition: top 0.3s ease-out, visibility 0s 0s;
 }
 
 .relationship-header {
@@ -715,13 +720,16 @@ body {
     height: 100%;
     background-color: white;
     z-index: 1000;
-    transition: left 0.3s ease-out;
+    visibility: hidden;
+    transition: left 0.3s ease-out, visibility 0s 0.3s;
     display: flex;
     flex-direction: column;
 }
 
 .parent-menu.active {
     left: 0;
+    visibility: visible;
+    transition: left 0.3s ease-out, visibility 0s 0s;
 }
 
 .parent-header {
@@ -846,10 +854,13 @@ body {
     padding: 20px;
     z-index: 1001;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transition: top 0.3s ease-out, transform 0.3s ease-out;
+    visibility: hidden;
+    transition: top 0.3s ease-out, transform 0.3s ease-out, visibility 0s 0.3s;
 }
 
 .parent-info-popup.active {
     top: 50%;
     transform: translate(-50%, -50%);
+    visibility: visible;
+    transition: top 0.3s ease-out, transform 0.3s ease-out, visibility 0s 0s;
 }
