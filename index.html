@@ -169,7 +169,7 @@
                     <div class="info-value" id="popupDiseases">None</div>
                 </div>
             </div>
-            
+
             <div class="popup-stats">
                 <div class="popup-stat-row">
                     <div class="popup-stat-label">Happiness</div>
@@ -198,4 +198,104 @@
             </div>
         </div>
     </div>
+
+    <!-- Relationship Menu Overlay -->
+    <div class="relationship-overlay" id="relationshipOverlay"></div>
+
+    <!-- Relationship Menu -->
+    <div class="relationship-menu" id="relationshipMenu">
+        <div class="relationship-header">
+            <div class="relationship-close" id="relationshipClose">✕</div>
+            <div class="relationship-title">Relationships</div>
+        </div>
+        <div class="relationship-content">
+            <div class="relationship-section">
+                <div class="section-divider">Parents</div>
+                <div id="parentsContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parent Profile Menu -->
+    <div class="parent-menu" id="parentMenu">
+        <div class="parent-header">
+            <div class="parent-back">←</div>
+            <div class="parent-title" id="parentTitle">MOTHER</div>
+        </div>
+        <div class="parent-content">
+            <div class="parent-profile-bar" id="parentProfileBar">
+                <div class="parent-avatar" id="parentAvatar">👩</div>
+                <div class="parent-info">
+                    <div class="parent-name" id="parentName">Parent Name</div>
+                    <div class="parent-age" id="parentAge">Age 30</div>
+                </div>
+            </div>
+            <div class="activities-divider">Activities</div>
+            <div class="menu-option disabled">
+                <div class="menu-option-icon">👁️</div>
+                <div class="menu-option-text">
+                    <div class="menu-option-title">Spy</div>
+                    <div class="menu-option-subtitle" id="spySubtitle">Spy on her</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parent Info Popup -->
+    <div class="parent-info-popup" id="parentInfoPopup">
+        <div class="popup-close" id="closeParentPopup">✕</div>
+        <div class="popup-header">
+            <div class="popup-avatar" id="parentPopupAvatar">👩</div>
+            <div class="popup-name">
+                <span id="parentPopupName">Parent Name</span>
+            </div>
+        </div>
+        <div class="popup-content">
+            <div class="info-row">
+                <div class="info-label">Relationship:</div>
+                <div class="info-value" id="parentPopupRelationship">Mother</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Age:</div>
+                <div class="info-value" id="parentPopupAge">30</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Education:</div>
+                <div class="info-value" id="parentPopupEducation">High School</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Occupation:</div>
+                <div class="info-value" id="parentPopupOccupation">Teacher</div>
+            </div>
+
+            <div class="popup-stats">
+                <div class="popup-stat-row">
+                    <div class="popup-stat-label">Relationship</div>
+                    <div class="popup-stat-bar">
+                        <div class="popup-stat-fill" id="parentPopupRelationshipBar"></div>
+                    </div>
+                </div>
+                <div class="popup-stat-row">
+                    <div class="popup-stat-label">Religiousness</div>
+                    <div class="popup-stat-bar">
+                        <div class="popup-stat-fill" id="parentPopupReligiousnessBar"></div>
+                    </div>
+                </div>
+                <div class="popup-stat-row">
+                    <div class="popup-stat-label">Generosity</div>
+                    <div class="popup-stat-bar">
+                        <div class="popup-stat-fill" id="parentPopupGenerosityBar"></div>
+                    </div>
+                </div>
+                <div class="popup-stat-row">
+                    <div class="popup-stat-label">Money</div>
+                    <div class="popup-stat-bar">
+                        <div class="popup-stat-fill" id="parentPopupMoneyBar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src="script.js"></script>
