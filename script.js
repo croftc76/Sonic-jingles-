@@ -428,6 +428,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    // Store initial character data for retry functionality
+    let initialCharacterData = null;
+    let isDead = false;
+
     // Function to generate parent data
     function generateParent(role, childCountry, childAge) {
         const parent = {};
@@ -1164,13 +1168,182 @@ document.addEventListener('DOMContentLoaded', function() {
                 animateSpeedometer('looks', looksValue);
 
                 hasAged = true;
+
+                // Store initial character data for retry
+                initialCharacterData = JSON.parse(JSON.stringify(characterData));
     }
 
-    // Age Button - Show Start Menu
+    // Function to get character status based on age
+    function getAgeStatus(age) {
+        if (age === 0) return "Infant";
+        if (age === 1) return "Toddler";
+        if (age >= 2 && age <= 3) return "Preschooler";
+        if (age >= 4 && age <= 12) return "Child";
+        if (age >= 13 && age <= 17) return "Teen";
+        if (age >= 18 && age <= 64) return "Adult";
+        if (age >= 65) return "Senior";
+        return "Adult";
+    }
+
+    // Complex death chance calculation
+    function calculateDeathChance(age, health, happiness) {
+        if (age < 65) return 0; // No death chance before 65
+        if (age >= 122) return 100; // Certain death at 122
+
+        // Base death chance increases with age past 65
+        const ageProgression = age - 65; // 0 at 65, 57 at 122
+        let baseChance = 0.5 + (ageProgression * 1.5); // Increases from 0.5% to ~86%
+
+        // Health factor: 90%+ health = low modifier, low health = high modifier
+        let healthModifier = 1.0;
+        if (health >= 90) {
+            healthModifier = 0.1; // 10% of base chance (very low)
+        } else if (health >= 75) {
+            healthModifier = 0.3; // 30% of base chance
+        } else if (health >= 50) {
+            healthModifier = 0.7; // 70% of base chance
+        } else if (health >= 25) {
+            healthModifier = 1.5; // 150% of base chance
+        } else {
+            healthModifier = 2.5; // 250% of base chance (very high)
+        }
+
+        // Happiness factor: 90%+ happiness = low modifier, low happiness = high modifier
+        let happinessModifier = 1.0;
+        if (happiness >= 90) {
+            happinessModifier = 0.15; // 15% of base chance
+        } else if (happiness >= 75) {
+            happinessModifier = 0.4; // 40% of base chance
+        } else if (happiness >= 50) {
+            happinessModifier = 0.8; // 80% of base chance
+        } else if (happiness >= 25) {
+            happinessModifier = 1.4; // 140% of base chance
+        } else {
+            happinessModifier = 2.2; // 220% of base chance
+        }
+
+        // Combined modifiers (multiplicative for more complexity)
+        const combinedModifier = (healthModifier + happinessModifier) / 2;
+        let finalChance = baseChance * combinedModifier;
+
+        // Additional age-based multipliers for very old age
+        if (age >= 100) {
+            finalChance *= 2.5;
+        } else if (age >= 90) {
+            finalChance *= 1.8;
+        } else if (age >= 80) {
+            finalChance *= 1.4;
+        }
+
+        // Cap at 99% (except for age 122 which is 100%)
+        return Math.min(finalChance, 99);
+    }
+
+    // Check for death
+    function checkDeath() {
+        if (isDead) return false;
+
+        const age = characterData.age;
+        const health = characterData.stats.health;
+        const happiness = characterData.stats.happiness;
+
+        const deathChance = calculateDeathChance(age, health, happiness);
+        const roll = Math.random() * 100;
+
+        if (roll < deathChance || age >= 122) {
+            isDead = true;
+            return true;
+        }
+
+        return false;
+    }
+
+    // Function to disable navigation buttons (make them gray and unclickable)
+    function disableNavButtons() {
+        const navButtons = document.querySelectorAll('.nav-button');
+        navButtons.forEach(button => {
+            if (!button.classList.contains('age-button')) {
+                button.classList.add('disabled');
+            }
+        });
+    }
+
+    // Function to enable navigation buttons
+    function enableNavButtons() {
+        const navButtons = document.querySelectorAll('.nav-button');
+        navButtons.forEach(button => {
+            button.classList.remove('disabled');
+        });
+    }
+
+    // Function to show death popup
+    function showDeathPopup() {
+        const deathOverlay = document.getElementById('deathOverlay');
+        const deathPopup = document.getElementById('deathPopup');
+        const deathName = document.getElementById('deathName');
+        const deathAge = document.getElementById('deathAge');
+        const deathCause = document.getElementById('deathCause');
+
+        if (deathName) {
+            deathName.textContent = `☠️ ${characterData.name}`;
+        }
+        if (deathAge) {
+            deathAge.textContent = `You died at the age of ${characterData.age}`;
+        }
+        if (deathCause) {
+            // Random peaceful death message
+            const causes = [
+                "You died while sleeping peacefully",
+                "You died of natural causes"
+            ];
+            deathCause.textContent = causes[Math.floor(Math.random() * causes.length)];
+        }
+
+        if (deathOverlay) deathOverlay.classList.add('active');
+        if (deathPopup) deathPopup.classList.add('active');
+
+        disableNavButtons();
+    }
+
+    // Function to age up
+    function ageUp() {
+        if (isDead) return;
+        if (characterData.age >= 122) return;
+
+        // Increment age
+        characterData.age++;
+
+        // Update age display
+        const characterAge = document.getElementById('characterAge');
+        if (characterAge) {
+            characterAge.textContent = characterData.age;
+        }
+
+        // Update status
+        const characterStatus = document.getElementById('characterStatus');
+        if (characterStatus) {
+            characterStatus.textContent = getAgeStatus(characterData.age);
+        }
+
+        // Check for death
+        if (checkDeath()) {
+            showDeathPopup();
+        }
+
+        // Flash the age button
+        if (ageButton) {
+            ageButton.style.backgroundColor = '#177722';
+            setTimeout(() => {
+                ageButton.style.backgroundColor = '#22bb33';
+            }, 100);
+        }
+    }
+
+    // Age Button - Show Start Menu or Age Up
     if (ageButton) {
         ageButton.addEventListener('click', function() {
             if (!hasAged) {
-                // Flash the button to dark green temporarily
+                // First time: Flash the button to dark green temporarily
                 this.style.backgroundColor = '#177722';
                 setTimeout(() => {
                     this.style.backgroundColor = '#22bb33';
@@ -1180,6 +1353,123 @@ document.addEventListener('DOMContentLoaded', function() {
                 randomizeCharacter();
                 startMenuOverlay.classList.add('active');
                 startMenu.classList.add('active');
+            } else {
+                // After game started: Age up
+                ageUp();
+            }
+        });
+    }
+
+    // Death popup button event listeners
+    const retryBtn = document.getElementById('retryBtn');
+    const newLifeBtn = document.getElementById('newLifeBtn');
+    const takeMomentBtn = document.getElementById('takeMomentBtn');
+
+    // Retry button - restart with same character data
+    if (retryBtn) {
+        retryBtn.addEventListener('click', function() {
+            if (!initialCharacterData) return;
+
+            // Reset character data to initial state
+            characterData = JSON.parse(JSON.stringify(initialCharacterData));
+            isDead = false;
+
+            // Hide death popup
+            const deathOverlay = document.getElementById('deathOverlay');
+            const deathPopup = document.getElementById('deathPopup');
+            if (deathOverlay) deathOverlay.classList.remove('active');
+            if (deathPopup) deathPopup.classList.remove('active');
+
+            // Re-enable navigation buttons
+            enableNavButtons();
+
+            // Update UI to reflect reset
+            const characterAge = document.getElementById('characterAge');
+            const characterStatus = document.getElementById('characterStatus');
+            const avatar = document.getElementById('avatar');
+
+            if (characterAge) characterAge.textContent = "0";
+            if (characterStatus) characterStatus.textContent = "Infant";
+            if (avatar) avatar.textContent = characterData.emoji;
+
+            // Reset stat displays
+            animateSpeedometer('happiness', characterData.stats.happiness);
+            animateSpeedometer('health', characterData.stats.health);
+            animateSpeedometer('smarts', characterData.stats.smarts);
+            animateSpeedometer('looks', characterData.stats.looks);
+
+            // Update journal
+            updateJournal(characterData);
+        });
+    }
+
+    // Start a new life button - show Start Menu
+    if (newLifeBtn) {
+        newLifeBtn.addEventListener('click', function() {
+            // Hide death popup
+            const deathOverlay = document.getElementById('deathOverlay');
+            const deathPopup = document.getElementById('deathPopup');
+            if (deathOverlay) deathOverlay.classList.remove('active');
+            if (deathPopup) deathPopup.classList.remove('active');
+
+            // Re-enable navigation buttons
+            enableNavButtons();
+
+            // Reset game state
+            isDead = false;
+            hasAged = false;
+
+            // Reset character data
+            characterData = {
+                name: "",
+                firstName: "",
+                lastName: "",
+                gender: "",
+                age: 0,
+                country: "",
+                ethnicity: "",
+                emoji: "",
+                stats: {
+                    happiness: 0,
+                    health: 0,
+                    smarts: 0,
+                    looks: 0
+                },
+                birthScenario: "",
+                parents: {
+                    mother: null,
+                    father: null
+                }
+            };
+            initialCharacterData = null;
+
+            // Randomize and show Start Menu
+            randomizeCharacter();
+            startMenuOverlay.classList.add('active');
+            startMenu.classList.add('active');
+        });
+    }
+
+    // Take a moment button - just close the popup, allow viewing profile
+    if (takeMomentBtn) {
+        takeMomentBtn.addEventListener('click', function() {
+            // Hide death popup
+            const deathOverlay = document.getElementById('deathOverlay');
+            const deathPopup = document.getElementById('deathPopup');
+            if (deathOverlay) deathOverlay.classList.remove('active');
+            if (deathPopup) deathPopup.classList.remove('active');
+
+            // Enable profile button only (keep others disabled)
+            enableNavButtons();
+        });
+    }
+
+    // Make profile button show death popup when dead and clicked
+    const profileButton = document.querySelectorAll('.nav-button')[0];
+    if (profileButton) {
+        profileButton.addEventListener('click', function() {
+            if (isDead) {
+                showDeathPopup();
             }
         });
     }

@@ -1185,3 +1185,147 @@ body {
 .name-input-go:active {
     transform: scale(0.95);
 }
+
+/* Death Popup */
+.death-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1200;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.death-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.death-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    background-color: white;
+    border-radius: 15px;
+    border: 4px solid #000000;
+    z-index: 1201;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.death-popup.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.death-header {
+    background-color: #000000;
+    color: white;
+    padding: 20px;
+    border-radius: 11px 11px 0 0;
+    text-align: center;
+}
+
+.death-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.death-content {
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.death-name {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #000;
+}
+
+.death-age {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.death-cause {
+    font-size: 16px;
+    color: #666;
+    font-style: italic;
+}
+
+.death-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 20px 25px 20px;
+}
+
+.death-btn {
+    padding: 15px 25px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.death-btn:active {
+    transform: scale(0.95);
+}
+
+.retry-btn {
+    background-color: #3498db;
+    color: white;
+}
+
+.retry-btn:hover {
+    background-color: #2980b9;
+}
+
+.new-life-btn {
+    background-color: #22bb33;
+    color: white;
+}
+
+.new-life-btn:hover {
+    background-color: #1ea82d;
+}
+
+.take-moment-btn {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.take-moment-btn:hover {
+    background-color: #7f8c8d;
+}
+
+/* Disabled navigation buttons when dead */
+.nav-button.disabled {
+    background-color: #cccccc !important;
+    color: #999999 !important;
+    cursor: not-allowed !important;
+    pointer-events: none;
+}
+
+.nav-button.disabled .nav-icon {
+    opacity: 0.5;
+}
