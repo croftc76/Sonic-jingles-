@@ -1313,16 +1313,31 @@ document.addEventListener('DOMContentLoaded', function() {
         // Increment age
         characterData.age++;
 
-        // Update age display
-        const characterAge = document.getElementById('characterAge');
-        if (characterAge) {
-            characterAge.textContent = characterData.age;
+        // Update age display in journal
+        const ageDisplay = document.getElementById('ageDisplay');
+        if (ageDisplay) {
+            ageDisplay.textContent = `Age: ${characterData.age} ${characterData.age === 1 ? 'year' : 'years'}`;
         }
 
         // Update status
         const characterStatus = document.getElementById('characterStatus');
         if (characterStatus) {
             characterStatus.textContent = getAgeStatus(characterData.age);
+        }
+
+        // Add journal entry for this age
+        const journalEntries = document.getElementById('journalEntries');
+        if (journalEntries) {
+            const ageEntry = document.createElement('div');
+            ageEntry.className = 'journal-age-entry';
+            ageEntry.textContent = `Age: ${characterData.age}`;
+            journalEntries.appendChild(ageEntry);
+
+            // Auto-scroll to the bottom of the journal
+            const journal = document.querySelector('.journal');
+            if (journal) {
+                journal.scrollTop = journal.scrollHeight;
+            }
         }
 
         // Check for death
@@ -1384,13 +1399,19 @@ document.addEventListener('DOMContentLoaded', function() {
             enableNavButtons();
 
             // Update UI to reflect reset
-            const characterAge = document.getElementById('characterAge');
+            const ageDisplay = document.getElementById('ageDisplay');
             const characterStatus = document.getElementById('characterStatus');
             const avatar = document.getElementById('avatar');
 
-            if (characterAge) characterAge.textContent = "0";
+            if (ageDisplay) ageDisplay.textContent = "Age: 0 years";
             if (characterStatus) characterStatus.textContent = "Infant";
             if (avatar) avatar.textContent = characterData.emoji;
+
+            // Clear journal entries
+            const journalEntries = document.getElementById('journalEntries');
+            if (journalEntries) {
+                journalEntries.innerHTML = '';
+            }
 
             // Reset stat displays
             animateSpeedometer('happiness', characterData.stats.happiness);

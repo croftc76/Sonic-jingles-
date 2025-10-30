@@ -176,6 +176,18 @@ body {
     width: 90%;
     border-radius: 3px;
 }
+
+.journal-age-entry {
+    font-weight: bold;
+    color: #003d7a;
+    margin: 12px 0;
+    padding: 8px 12px;
+    background-color: #f0f7ff;
+    border-left: 4px solid #3498db;
+    border-radius: 4px;
+    font-size: 15px;
+}
+
 .stats {
     padding: 15px 15px 0;
     background-color: white;
